@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0D1117;
+  --foreground: #F5F7FA;
+  --surface-card: #161B22;
+  --surface-secondary: #1F2937;
+  --accent-blue: #3B82F6;
+  --border-color: #30363D;
+}
+
+body {
+  background-color: #0D1117;
+  color: #F5F7FA;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Large Minimal White Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  color: #F5F7FA;
+}
+
+/* Minimalist Clean Buttons — Blue ONLY for Action Links/Buttons */
+.btn-primary {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid #3B82F6;
+  transition: all 0.15s ease;
+}
+.btn-primary:hover {
+  background-color: #2563EB;
+  border-color: #2563EB;
+}
+
+.btn-secondary {
+  background-color: #161B22;
+  color: #F5F7FA;
+  border: 1px solid #30363D;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+.btn-secondary:hover {
+  background-color: #1F2937;
+  border-color: #484F58;
+  color: #FFFFFF;
+}
+
+.btn-accent {
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 1px solid #3B82F6;
+  transition: all 0.15s ease;
+}
+.btn-accent:hover {
+  background-color: #2563EB;
+}
+
+/* Clean Minimal Card Containers (Thin Borders, Subtle Dark Surface) */
+.card-glass-light, .card-white {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  color: #F5F7FA;
+  transition: border-color 0.15s ease;
+}
+.card-glass-light:hover, .card-white:hover {
+  border-color: #484F58;
+}
+
+.card-glass-dark {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  color: #F5F7FA;
+}
+
+.card-clean {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  color: #F5F7FA;
+}
+
+.tech-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  font-weight: 600;
+  background: #1F2937;
+  color: #3B82F6;
+  border: 1px solid #30363D;
+}
