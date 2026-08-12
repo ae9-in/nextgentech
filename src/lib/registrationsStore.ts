@@ -89,3 +89,7 @@ export function addCandidateToStore(candidate: Partial<CandidateRegistration>): 
 export function getCandidatesFromStore(): CandidateRegistration[] {
   return GLOBAL_CANDIDATES_STORE;
 }
+
+export function clearCandidatesStore(): void {
+  GLOBAL_CANDIDATES_STORE.length = 0;
+}

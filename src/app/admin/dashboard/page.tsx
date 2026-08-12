@@ -213,8 +213,20 @@ export default function AdminDashboardPage() {
       return;
     }
     try {
+      // Clear client-side localStorage backup
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.removeItem('nxtgen_local_applications');
+        } catch (e) {}
+      }
+
+      // Set state to empty immediately for 0ms visual clear feedback
+      setApplications([]);
+      setStudents([]);
+      setIssuedCertificates([]);
+
       const res = await fetch('/api/v1/admin/clear-students', { method: 'POST' }).then((r) => r.json());
-      triggerMessage(`🗑️ Database Wiped Clean: Cleared ${res.data?.deletedUsersCount || 0} students and ${res.data?.deletedLeadsCount || 0} applications!`);
+      triggerMessage(`🗑️ System Wiped Clean: All student accounts and slot applications cleared!`);
       loadAllAdminData();
     } catch (err: any) {
       alert(err.message || 'Failed to wipe student data');
