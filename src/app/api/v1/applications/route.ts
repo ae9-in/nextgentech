@@ -2,12 +2,10 @@ import { NextRequest } from 'next/server';
 import { getCollection, COLLECTIONS } from '@/lib/db';
 import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
+import { addCandidateToStore, getCandidatesFromStore } from '@/lib/registrationsStore';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-// In-Memory Backup Store for Triple Redundancy
-const MEMORY_LEADS: any[] = [];
 
 // POST: Public application submission from "Join NextGen Tech" modal / 1-Day slot booking
 export async function POST(request: NextRequest) {
@@ -37,8 +35,19 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
     };
 
-    // Store in memory backup
-    MEMORY_LEADS.unshift(leadDoc);
+    // Add to persistent module store
+    addCandidateToStore({
+      fullName,
+      email,
+      phone,
+      college,
+      programTrack,
+      slotDate,
+      ticketId,
+      experienceLevel,
+      status: 'CONFIRMED_SLOT',
+      appliedAt: new Date().toISOString(),
+    });
 
     try {
       const leadsCol = await getCollection(COLLECTIONS.LEADS);
@@ -78,7 +87,7 @@ export async function POST(request: NextRequest) {
         );
       }
     } catch (dbErr) {
-      console.error('MongoDB Atlas sync error (served from memory):', dbErr);
+      console.error('MongoDB Atlas sync error (served from store):', dbErr);
     }
 
     return apiSuccess(
@@ -99,11 +108,13 @@ export async function GET(request: NextRequest) {
       const leadsCol = await getCollection(COLLECTIONS.LEADS);
       dbLeads = await leadsCol.find({}).sort({ appliedAt: -1 }).toArray();
     } catch (dbErr) {
-      console.error('MongoDB fetch error (serving from memory):', dbErr);
+      console.error('MongoDB fetch error (serving from store):', dbErr);
     }
 
-    // Merge database leads with in-memory leads
-    const allLeads = [...dbLeads, ...MEMORY_LEADS].filter(
+    const storeLeads = getCandidatesFromStore();
+
+    // Merge database leads with persistent store candidates (unique by email / ticketId)
+    const allLeads = [...dbLeads, ...storeLeads].filter(
       (v, i, a) => a.findIndex((t) => (t.ticketId && t.ticketId === v.ticketId) || (t.email && t.email === v.email)) === i
     );
 
