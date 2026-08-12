@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ArrowRight } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo';
 
 interface NavbarProps {
   onOpenJoinModal?: () => void;
@@ -43,14 +44,7 @@ export function Navbar({ onOpenJoinModal }: NavbarProps = {}) {
       >
         <div className="flex items-center justify-between">
           {/* Logo Mark: Glass Signal Brand */}
-          <Link href="/" prefetch={true} className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-8.5 h-8.5 rounded-xl bg-[#0E8C93] text-white flex items-center justify-center font-display font-bold text-sm tracking-tight shadow-md border border-white/20">
-              N
-            </div>
-            <span className="font-display font-bold text-lg text-white tracking-tight">
-              NEXTGEN <span className="text-[#7FC4C8] font-sans font-medium text-sm">TECH</span>
-            </span>
-          </Link>
+          <Logo size="md" />
 
           {/* Desktop Navigation Links — Frosted Glass Bar */}
           <nav className="hidden lg:flex items-center space-x-1 bg-white/10 backdrop-blur-md p-1 rounded-xl border border-white/15">

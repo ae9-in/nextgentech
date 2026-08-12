@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUser } from '@/context/UserContext';
+import { Logo } from '@/components/ui/Logo';
 import {
   LayoutDashboard,
   BookOpen,
@@ -49,14 +50,7 @@ export function StudentSidebar() {
   return (
     <aside className="w-64 bg-white text-[#0A1E33] flex flex-col justify-between border-r border-[#E1E8E8] shrink-0 min-h-screen sticky top-0 hidden md:flex z-30 select-none">
       <div className="p-6 space-y-6">
-        <Link href="/" prefetch={true} className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-[#0A1E33] text-white flex items-center justify-center font-display font-semibold text-sm">
-            N
-          </div>
-          <span className="font-display font-semibold text-base tracking-tight text-[#0A1E33]">
-            NEXTGEN TECH
-          </span>
-        </Link>
+        <Logo size="sm" />
 
         <nav className="space-y-1">
           {sidebarLinks.map((item) => {

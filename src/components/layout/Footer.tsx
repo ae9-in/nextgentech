@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Logo } from '@/components/ui/Logo';
 
 export function Footer() {
   return (
@@ -11,14 +12,7 @@ export function Footer() {
 
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-md bg-[#0E8C93] text-white flex items-center justify-center font-display font-semibold text-sm">
-                N
-              </div>
-              <span className="font-display font-semibold text-base tracking-tight text-white">
-                NEXTGEN TECH
-              </span>
-            </div>
+            <Logo size="md" showTagline={true} />
 
             <p className="text-[#6E859B] text-xs max-w-sm leading-relaxed font-sans font-normal">
               Practical technology training, real-world projects, and simulated developer internship experiences for college students.
