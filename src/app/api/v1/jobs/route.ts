@@ -5,6 +5,9 @@ import { requirePermission } from '@/lib/rbac';
 import { apiSuccess, parsePagination, apiPaginated } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { createJobSchema, validateBody } from '@/lib/validate';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: List job listings
 export async function GET(request: NextRequest) {

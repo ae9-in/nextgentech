@@ -7,7 +7,9 @@ import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { updateUserSchema, validateBody } from '@/lib/validate';
 
-// GET: Get individual user details
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

@@ -6,6 +6,9 @@ import { apiSuccess, apiError, parsePagination, apiPaginated } from '@/lib/apiRe
 import { handleApiError } from '@/lib/errors';
 import { createEnrollmentSchema, validateBody } from '@/lib/validate';
 import { createAuditLog, AUDIT_ACTIONS } from '@/lib/audit';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: List user enrollments or all enrollments for admin
 export async function GET(request: NextRequest) {

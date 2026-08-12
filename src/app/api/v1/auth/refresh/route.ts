@@ -5,6 +5,9 @@ import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { refreshTokenSchema, validateBody } from '@/lib/validate';
 import { ZodError } from 'zod';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 export async function POST(request: NextRequest) {
   try {

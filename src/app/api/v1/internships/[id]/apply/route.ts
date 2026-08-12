@@ -7,7 +7,9 @@ import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { applyInternshipSchema, validateBody } from '@/lib/validate';
 
-// POST: Apply for internship (with duplicate application prevention)
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }

@@ -8,6 +8,9 @@ import { createCourseSchema, validateBody } from '@/lib/validate';
 import { createAuditLog, AUDIT_ACTIONS } from '@/lib/audit';
 import { ZodError } from 'zod';
 import { apiError } from '@/lib/apiResponse';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: List courses (public for published, all for admin)
 export async function GET(request: NextRequest) {

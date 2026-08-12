@@ -6,7 +6,9 @@ import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { submitQuizAttemptSchema, validateBody } from '@/lib/validate';
 
-// POST: Submit quiz attempt and score strictly on backend
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }

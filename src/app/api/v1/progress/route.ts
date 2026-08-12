@@ -5,6 +5,9 @@ import { authenticateRequest } from '@/lib/auth';
 import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { updateProgressSchema, validateBody } from '@/lib/validate';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: Get course progress for current student
 export async function GET(request: NextRequest) {

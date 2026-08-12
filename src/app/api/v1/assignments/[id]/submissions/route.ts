@@ -8,7 +8,9 @@ import { handleApiError } from '@/lib/errors';
 import { submitAssignmentSchema, gradeAssignmentSchema, validateBody } from '@/lib/validate';
 import { createAuditLog, AUDIT_ACTIONS } from '@/lib/audit';
 
-// GET: Get submissions for an assignment
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }

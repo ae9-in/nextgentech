@@ -4,6 +4,9 @@ import { getCollection, COLLECTIONS } from '@/lib/db';
 import { authenticateRequest } from '@/lib/auth';
 import { apiSuccess, parsePagination, apiPaginated } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: Get user notifications
 export async function GET(request: NextRequest) {

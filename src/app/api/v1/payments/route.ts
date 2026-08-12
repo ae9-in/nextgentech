@@ -4,6 +4,9 @@ import { authenticateRequest } from '@/lib/auth';
 import { apiSuccess, parsePagination, apiPaginated } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { createOrderSchema, validateBody } from '@/lib/validate';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 // GET: Get payment order history for current user (or all payments for admin)
 export async function GET(request: NextRequest) {

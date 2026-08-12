@@ -7,6 +7,9 @@ import { handleApiError } from '@/lib/errors';
 import { registerSchema, validateBody } from '@/lib/validate';
 import { createAuditLog, AUDIT_ACTIONS } from '@/lib/audit';
 import { ZodError } from 'zod';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 
 export async function POST(request: NextRequest) {
   try {
