@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, RotateCcw } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface Message {
   id: number;
@@ -647,13 +648,12 @@ function findBestAnswer(userMessage: string): string {
 }
 
 const QUICK_REPLIES = [
+  'Register Now 📝',
   '1-Day Programs',
   'Internships',
   'Bootcamps',
   'Pricing',
-  'How to Register',
   'Certificates',
-  'Web Development',
   'Which is Best for Me?',
   'Career & Jobs',
   'College Partnership',
@@ -664,7 +664,7 @@ export function NextGenChatBot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hi! 👋 Welcome to NextGen Tech!\n\nI'm your virtual assistant. I can help you with information about our programs, pricing, registration, and more.\n\nHow can I help you today?",
+      text: "Hi! 👋 Welcome to NextGen Tech!\n\nI'm your virtual assistant. I can help you answer questions AND register for programs directly in this chat!\n\nHow can I help you today? Tap 'Register Now 📝' or ask any question!",
       sender: 'bot',
       timestamp: new Date(),
     },
@@ -673,6 +673,18 @@ export function NextGenChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Step-by-Step Conversational Registration State
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [regStep, setRegStep] = useState<number>(0);
+  const [regData, setRegData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    college: '',
+    programTrack: '',
+    slotDate: '',
+  });
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -683,6 +695,157 @@ export function NextGenChatBot() {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  const resetChat = () => {
+    setIsRegistering(false);
+    setRegStep(0);
+    setRegData({ fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' });
+    setMessages([
+      {
+        id: Date.now(),
+        text: "Hi! 👋 Welcome to NextGen Tech!\n\nI'm your virtual assistant. I can help you answer questions AND register for programs directly in this chat!\n\nHow can I help you today? Tap 'Register Now 📝' or ask any question!",
+        sender: 'bot',
+        timestamp: new Date(),
+      },
+    ]);
+  };
+
+  const startRegistrationFlow = (initialText?: string) => {
+    setIsRegistering(true);
+    setRegStep(1);
+    setRegData({ fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' });
+
+    const botMsg: Message = {
+      id: Date.now() + 1,
+      text: "Awesome! Let's get you registered step-by-step! 📝\n\nStep 1 of 6: What is your Full Name?",
+      sender: 'bot',
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, botMsg]);
+    setIsTyping(false);
+  };
+
+  const handleRegistrationInput = async (userText: string) => {
+    const text = userText.trim();
+    const lower = text.toLowerCase();
+
+    // Check for cancellation
+    if (lower === 'cancel' || lower === 'exit' || lower === 'stop') {
+      setIsRegistering(false);
+      setRegStep(0);
+      const cancelMsg: Message = {
+        id: Date.now() + 1,
+        text: "Registration cancelled. 😊 Feel free to ask any questions or tap 'Register Now 📝' anytime!",
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, cancelMsg]);
+      setIsTyping(false);
+      return;
+    }
+
+    if (regStep === 1) {
+      // Collected Name
+      setRegData((prev) => ({ ...prev, fullName: text }));
+      setRegStep(2);
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `Thanks ${text}! 👋\n\nStep 2 of 6: What is your Email Address?`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    } else if (regStep === 2) {
+      // Collected Email
+      setRegData((prev) => ({ ...prev, email: text }));
+      setRegStep(3);
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `Got it! 📧\n\nStep 3 of 6: What is your Phone / WhatsApp Number?`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    } else if (regStep === 3) {
+      // Collected Phone
+      setRegData((prev) => ({ ...prev, phone: text }));
+      setRegStep(4);
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `Great! 📱\n\nStep 4 of 6: What is your College / University name?`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    } else if (regStep === 4) {
+      // Collected College
+      setRegData((prev) => ({ ...prev, college: text }));
+      setRegStep(5);
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `Thank you! 🏫\n\nStep 5 of 6: Which program would you like to enroll in?\n\n1️⃣ Web Development Sprint (₹299)\n2️⃣ HR & Recruitment Sprint (₹199)\n3️⃣ BDE & Lead Gen Sprint (₹249)\n4️⃣ Corporate Sales Sprint (₹249)\n5️⃣ Digital Marketing Sprint (₹199)\n6️⃣ IT & Client Services Sprint (₹149)\n7️⃣ Web Development Bootcamp (₹999)\n8️⃣ Developer Internship Track (₹999)\n\nTap a program option below or type your choice!`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    } else if (regStep === 5) {
+      // Collected Program Track
+      setRegData((prev) => ({ ...prev, programTrack: text }));
+      setRegStep(6);
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `Almost done! 📅\n\nStep 6 of 6: Choose your preferred batch slot date:\n\n• Upcoming Saturday (Weekend Batch)\n• Upcoming Sunday (Weekend Batch)\n• Next Weekday Batch\n\nTap a slot or type your preference!`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    } else if (regStep === 6) {
+      // Collected Slot Date -> Submit to Database
+      const finalSlot = text;
+      const finalReg = { ...regData, slotDate: finalSlot };
+      const ticketId = 'NGT-2026-' + Math.floor(1000 + Math.random() * 9000);
+
+      try {
+        await fetch('/api/v1/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: finalReg.fullName,
+            email: finalReg.email,
+            phone: finalReg.phone,
+            college: finalReg.college,
+            programTrack: finalReg.programTrack,
+            slotDate: finalSlot,
+            ticketId: ticketId,
+          }),
+        });
+      } catch (err) {
+        console.error('Database submission error:', err);
+      }
+
+      // Trigger Confetti Celebration
+      try {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+      } catch (e) {}
+
+      setIsRegistering(false);
+      setRegStep(0);
+
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: `🎉 REGISTRATION CONFIRMED! 🎟️\n\nCongratulations, ${finalReg.fullName}!\n\n📋 Your Pass Details:\n• Ticket Pass ID: ${ticketId}\n• Program: ${finalReg.programTrack}\n• Slot Date: ${finalSlot}\n• Email: ${finalReg.email}\n• Phone: ${finalReg.phone}\n• College: ${finalReg.college}\n\nYour registration has been saved in our system! Our team will email you the joining link and pre-session instructions.\n\nType 'new' or ask any questions if you need further help!`,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+      setIsTyping(false);
+    }
+  };
 
   const sendMessage = (text: string) => {
     if (!text.trim()) return;
@@ -699,6 +862,29 @@ export function NextGenChatBot() {
     setIsTyping(true);
 
     setTimeout(() => {
+      const lower = text.toLowerCase().trim();
+
+      // Trigger registration if user wants to register or click chip
+      if (
+        !isRegistering &&
+        (lower.includes('register') ||
+          lower.includes('book') ||
+          lower.includes('enroll') ||
+          lower.includes('apply') ||
+          lower === 'how to register' ||
+          lower.includes('sign up'))
+      ) {
+        startRegistrationFlow(text);
+        return;
+      }
+
+      // If already in registration flow, handle step input
+      if (isRegistering) {
+        handleRegistrationInput(text);
+        return;
+      }
+
+      // Normal Q&A response
       const botResponse = findBestAnswer(text);
       const botMessage: Message = {
         id: Date.now() + 1,
@@ -708,12 +894,36 @@ export function NextGenChatBot() {
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-    }, 600 + Math.random() * 800);
+    }, 600 + Math.random() * 600);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     sendMessage(input);
+  };
+
+  // Determine dynamic quick reply chips based on current registration step
+  const getDynamicChips = () => {
+    if (isRegistering) {
+      if (regStep === 5) {
+        return [
+          'Web Dev Sprint (₹299)',
+          'HR Sprint (₹199)',
+          'BDE Sprint (₹249)',
+          'Sales Sprint (₹249)',
+          'Digital Marketing Sprint (₹199)',
+          'IT Services Sprint (₹149)',
+          'Web Dev Bootcamp (₹999)',
+          'Internship Track (₹999)',
+          'Cancel',
+        ];
+      }
+      if (regStep === 6) {
+        return ['Upcoming Saturday', 'Upcoming Sunday', 'Next Weekday Batch', 'Cancel'];
+      }
+      return ['Cancel'];
+    }
+    return QUICK_REPLIES;
   };
 
   return (
@@ -746,17 +956,10 @@ export function NextGenChatBot() {
             </div>
             <div className="flex items-center gap-1.5">
               <button
-                onClick={() => {
-                  setMessages([{
-                    id: Date.now(),
-                    text: "Hi! 👋 Welcome to NextGen Tech!\n\nI'm your virtual assistant. I can help you with information about our programs, pricing, registration, and more.\n\nHow can I help you today?",
-                    sender: 'bot',
-                    timestamp: new Date(),
-                  }]);
-                }}
+                onClick={resetChat}
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
                 aria-label="New chat"
-                title="New Chat"
+                title="New Chat / Reset"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -821,20 +1024,24 @@ export function NextGenChatBot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Reply Chips */}
-          {messages.length <= 2 && (
-            <div className="px-4 py-2.5 flex flex-wrap gap-1.5 bg-white border-t border-[#E1E8E8] shrink-0">
-              {QUICK_REPLIES.map((reply) => (
-                <button
-                  key={reply}
-                  onClick={() => sendMessage(reply)}
-                  className="px-3 py-1.5 text-[11px] font-medium rounded-full bg-[#E4F3F3] text-[#0B6E74] hover:bg-[#0E8C93] hover:text-white transition-colors border border-[#0E8C93]/20"
-                >
-                  {reply}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Dynamic Quick Reply Chips */}
+          <div className="px-4 py-2.5 flex flex-wrap gap-1.5 bg-white border-t border-[#E1E8E8] shrink-0 max-h-32 overflow-y-auto">
+            {getDynamicChips().map((reply) => (
+              <button
+                key={reply}
+                onClick={() => sendMessage(reply)}
+                className={`px-3 py-1.5 text-[11px] font-medium rounded-full transition-colors border ${
+                  reply === 'Register Now 📝'
+                    ? 'bg-[#F2803A] text-white hover:bg-[#E06A24] border-[#F2803A] shadow-xs font-bold'
+                    : reply === 'Cancel'
+                    ? 'bg-red-50 text-red-600 hover:bg-red-600 hover:text-white border-red-200'
+                    : 'bg-[#E4F3F3] text-[#0B6E74] hover:bg-[#0E8C93] hover:text-white border-[#0E8C93]/20'
+                }`}
+              >
+                {reply}
+              </button>
+            ))}
+          </div>
 
           {/* Input Bar */}
           <form
@@ -846,7 +1053,7 @@ export function NextGenChatBot() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your question..."
+              placeholder={isRegistering ? `Type your answer for Step ${regStep}...` : "Type your question or 'register'..."}
               className="flex-1 px-3.5 py-2.5 text-[13px] bg-[#F4F8F8] border border-[#E1E8E8] rounded-xl outline-none focus:border-[#0E8C93] focus:ring-1 focus:ring-[#0E8C93]/30 transition-all text-[#0A1E33] placeholder:text-[#8CA0AB]"
             />
             <button
@@ -863,3 +1070,4 @@ export function NextGenChatBot() {
     </>
   );
 }
+
