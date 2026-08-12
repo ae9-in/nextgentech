@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import { getCollection, COLLECTIONS } from '@/lib/db';
 import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
-import { addCandidateToStore, getCandidatesFromStore } from '@/lib/registrationsStore';
+import { addCandidateToStore } from '@/lib/registrationsStore';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -108,25 +108,18 @@ export async function GET(request: NextRequest) {
       const leadsCol = await getCollection(COLLECTIONS.LEADS);
       dbLeads = await leadsCol.find({}).sort({ appliedAt: -1 }).toArray();
     } catch (dbErr) {
-      console.error('MongoDB fetch error (serving from store):', dbErr);
+      console.error('MongoDB fetch error:', dbErr);
     }
 
-    const storeLeads = getCandidatesFromStore();
-
-    // Merge database leads with persistent store candidates (unique by email / ticketId)
-    const allLeads = [...dbLeads, ...storeLeads].filter(
-      (v, i, a) => a.findIndex((t) => (t.ticketId && t.ticketId === v.ticketId) || (t.email && t.email === v.email)) === i
-    );
-
-    const formatted = allLeads.map((l) => ({
-      _id: l._id ? l._id.toString() : `MEM-${Math.random()}`,
-      fullName: l.fullName || 'M SAI',
-      email: l.email || 'msai@student.nextgentech.in',
-      phone: l.phone || '+91 9876543210',
-      college: l.college || 'NextGen Tech',
-      programTrack: l.programTrack || 'Web Development Sprint',
-      slotDate: l.slotDate || 'Upcoming Saturday',
-      ticketId: l.ticketId || `NGT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+    const formatted = dbLeads.map((l) => ({
+      _id: l._id ? l._id.toString() : `DB-${Math.random()}`,
+      fullName: l.fullName || 'Unknown',
+      email: l.email || '',
+      phone: l.phone || '',
+      college: l.college || 'N/A',
+      programTrack: l.programTrack || 'N/A',
+      slotDate: l.slotDate || 'N/A',
+      ticketId: l.ticketId || 'N/A',
       experienceLevel: l.experienceLevel || 'Beginner',
       status: l.status || 'CONFIRMED_SLOT',
       appliedAt: l.appliedAt || new Date(),

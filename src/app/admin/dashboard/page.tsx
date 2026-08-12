@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import confetti from 'canvas-confetti';
@@ -49,6 +49,10 @@ export default function AdminDashboardPage() {
   const [issuedCertificates, setIssuedCertificates] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'students' | 'certificates'>('overview');
   const [loading, setLoading] = useState(true);
+
+  // Guard ref: when true, polling skips re-fetching (set after "Clear Student Data")
+  const isClearedRef = useRef(false);
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Custom Certificate Generation Form State
@@ -74,7 +78,10 @@ export default function AdminDashboardPage() {
     }
   }, []);
 
-  const loadAllAdminData = async () => {
+  const loadAllAdminData = useCallback(async () => {
+    // If data was just cleared, skip this fetch to prevent stale data from reappearing
+    if (isClearedRef.current) return;
+
     setLoading(true);
     try {
       const timestamp = Date.now();
@@ -83,6 +90,9 @@ export default function AdminDashboardPage() {
         fetch(`/api/v1/users?role=STUDENT&t=${timestamp}`, { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ data: [] })),
         fetch(`/api/v1/certificates?t=${timestamp}`, { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ data: [] })),
       ]);
+
+      // Double-check the guard after async calls complete
+      if (isClearedRef.current) return;
 
       // Read any locally submitted applications stored in browser localStorage
       let localApps: any[] = [];
@@ -114,21 +124,20 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
     if (isUnlocked) {
       loadAllAdminData();
       // Poll every 6 seconds for new live chatbot / website registrations
-      interval = setInterval(() => {
+      pollingRef.current = setInterval(() => {
         loadAllAdminData();
       }, 6000);
     }
     return () => {
-      if (interval) clearInterval(interval);
+      if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [isUnlocked]);
+  }, [isUnlocked, loadAllAdminData]);
 
   // Combined Students List (Users + Applicants) so all student names are available
   const combinedStudentsList = [
@@ -213,22 +222,43 @@ export default function AdminDashboardPage() {
       return;
     }
     try {
-      // Clear client-side localStorage backup
+      // 1. Set the guard so polling cannot refetch stale data
+      isClearedRef.current = true;
+
+      // 2. Stop the polling interval immediately
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+
+      // 3. Clear client-side localStorage backup
       if (typeof window !== 'undefined') {
         try {
           localStorage.removeItem('nxtgen_local_applications');
         } catch (e) {}
       }
 
-      // Set state to empty immediately for 0ms visual clear feedback
+      // 4. Set state to empty immediately for instant visual feedback
       setApplications([]);
       setStudents([]);
       setIssuedCertificates([]);
 
-      const res = await fetch('/api/v1/admin/clear-students', { method: 'POST' }).then((r) => r.json());
+      // 5. Call the server to clear MongoDB
+      await fetch('/api/v1/admin/clear-students', { method: 'POST', cache: 'no-store' }).then((r) => r.json());
+
       triggerMessage(`🗑️ System Wiped Clean: All student accounts and slot applications cleared!`);
-      loadAllAdminData();
+
+      // 6. Wait 3 seconds for MongoDB deletions to propagate, then lift the guard and resume polling
+      setTimeout(() => {
+        isClearedRef.current = false;
+        loadAllAdminData();
+        pollingRef.current = setInterval(() => {
+          loadAllAdminData();
+        }, 6000);
+      }, 3000);
     } catch (err: any) {
+      // On error, lift the guard so polling can resume
+      isClearedRef.current = false;
       alert(err.message || 'Failed to wipe student data');
     }
   };
