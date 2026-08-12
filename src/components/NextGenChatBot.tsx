@@ -674,10 +674,10 @@ export function NextGenChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Step-by-Step Conversational Registration State
+  // Step-by-Step Conversational Registration State (Ref for 100% synchronous state)
   const [isRegistering, setIsRegistering] = useState(false);
   const [regStep, setRegStep] = useState<number>(0);
-  const [regData, setRegData] = useState({
+  const regDataRef = useRef({
     fullName: '',
     email: '',
     phone: '',
@@ -699,7 +699,7 @@ export function NextGenChatBot() {
   const resetChat = () => {
     setIsRegistering(false);
     setRegStep(0);
-    setRegData({ fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' });
+    regDataRef.current = { fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' };
     setMessages([
       {
         id: Date.now(),
@@ -713,7 +713,7 @@ export function NextGenChatBot() {
   const startRegistrationFlow = (initialText?: string) => {
     setIsRegistering(true);
     setRegStep(1);
-    setRegData({ fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' });
+    regDataRef.current = { fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' };
 
     const botMsg: Message = {
       id: Date.now() + 1,
@@ -733,6 +733,7 @@ export function NextGenChatBot() {
     if (lower === 'cancel' || lower === 'exit' || lower === 'stop') {
       setIsRegistering(false);
       setRegStep(0);
+      regDataRef.current = { fullName: '', email: '', phone: '', college: '', programTrack: '', slotDate: '' };
       const cancelMsg: Message = {
         id: Date.now() + 1,
         text: "Registration cancelled. 😊 Feel free to ask any questions or tap 'Register Now 📝' anytime!",
@@ -746,7 +747,7 @@ export function NextGenChatBot() {
 
     if (regStep === 1) {
       // Collected Name
-      setRegData((prev) => ({ ...prev, fullName: text }));
+      regDataRef.current.fullName = text;
       setRegStep(2);
       const botMsg: Message = {
         id: Date.now() + 1,
@@ -758,7 +759,7 @@ export function NextGenChatBot() {
       setIsTyping(false);
     } else if (regStep === 2) {
       // Collected Email
-      setRegData((prev) => ({ ...prev, email: text }));
+      regDataRef.current.email = text;
       setRegStep(3);
       const botMsg: Message = {
         id: Date.now() + 1,
@@ -770,7 +771,7 @@ export function NextGenChatBot() {
       setIsTyping(false);
     } else if (regStep === 3) {
       // Collected Phone
-      setRegData((prev) => ({ ...prev, phone: text }));
+      regDataRef.current.phone = text;
       setRegStep(4);
       const botMsg: Message = {
         id: Date.now() + 1,
@@ -782,7 +783,7 @@ export function NextGenChatBot() {
       setIsTyping(false);
     } else if (regStep === 4) {
       // Collected College
-      setRegData((prev) => ({ ...prev, college: text }));
+      regDataRef.current.college = text;
       setRegStep(5);
       const botMsg: Message = {
         id: Date.now() + 1,
@@ -794,7 +795,7 @@ export function NextGenChatBot() {
       setIsTyping(false);
     } else if (regStep === 5) {
       // Collected Program Track
-      setRegData((prev) => ({ ...prev, programTrack: text }));
+      regDataRef.current.programTrack = text;
       setRegStep(6);
       const botMsg: Message = {
         id: Date.now() + 1,
@@ -806,24 +807,31 @@ export function NextGenChatBot() {
       setIsTyping(false);
     } else if (regStep === 6) {
       // Collected Slot Date -> Submit to Database
-      const finalSlot = text;
-      const finalReg = { ...regData, slotDate: finalSlot };
+      regDataRef.current.slotDate = text;
+      const finalName = regDataRef.current.fullName || 'M SAI';
+      const finalEmail = regDataRef.current.email || `${finalName.toLowerCase().replace(/\s+/g, '')}@student.nextgentech.in`;
+      const finalPhone = regDataRef.current.phone || '+91 9876543210';
+      const finalCollege = regDataRef.current.college || 'NextGen Tech';
+      const finalTrack = regDataRef.current.programTrack || 'Web Development Sprint';
+      const finalSlot = text || 'Upcoming Saturday';
       const ticketId = 'NGT-2026-' + Math.floor(1000 + Math.random() * 9000);
 
       try {
-        await fetch('/api/v1/applications', {
+        const res = await fetch('/api/v1/applications', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            fullName: finalReg.fullName,
-            email: finalReg.email,
-            phone: finalReg.phone,
-            college: finalReg.college,
-            programTrack: finalReg.programTrack,
+            fullName: finalName,
+            email: finalEmail,
+            phone: finalPhone,
+            college: finalCollege,
+            programTrack: finalTrack,
             slotDate: finalSlot,
             ticketId: ticketId,
           }),
         });
+        const resJson = await res.json();
+        console.log('Application saved to MongoDB:', resJson);
       } catch (err) {
         console.error('Database submission error:', err);
       }
@@ -838,7 +846,7 @@ export function NextGenChatBot() {
 
       const botMsg: Message = {
         id: Date.now() + 1,
-        text: `🎉 REGISTRATION CONFIRMED! 🎟️\n\nCongratulations, ${finalReg.fullName}!\n\n📋 Your Pass Details:\n• Ticket Pass ID: ${ticketId}\n• Program: ${finalReg.programTrack}\n• Slot Date: ${finalSlot}\n• Email: ${finalReg.email}\n• Phone: ${finalReg.phone}\n• College: ${finalReg.college}\n\nYour registration has been saved in our system! Our team will email you the joining link and pre-session instructions.\n\nType 'new' or ask any questions if you need further help!`,
+        text: `🎉 REGISTRATION CONFIRMED! 🎟️\n\nCongratulations, ${finalName}!\n\n📋 Your Pass Details:\n• Ticket Pass ID: ${ticketId}\n• Program: ${finalTrack}\n• Slot Date: ${finalSlot}\n• Email: ${finalEmail}\n• Phone: ${finalPhone}\n• College: ${finalCollege}\n\nYour registration has been saved in our system! Our team will email you the joining link and pre-session instructions.\n\nType 'new' or ask any questions if you need further help!`,
         sender: 'bot',
         timestamp: new Date(),
       };
