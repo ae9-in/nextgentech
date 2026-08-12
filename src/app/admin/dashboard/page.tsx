@@ -102,15 +102,23 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
+    let interval: NodeJS.Timeout;
     if (isUnlocked) {
       loadAllAdminData();
+      // Poll every 6 seconds for new live chatbot / website registrations
+      interval = setInterval(() => {
+        loadAllAdminData();
+      }, 6000);
     }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isUnlocked]);
 
   // Combined Students List (Users + Applicants) so all student names are available
   const combinedStudentsList = [
-    ...students.map((s) => ({ id: s._id, name: s.name, email: s.email, college: s.college })),
-    ...applications.map((a) => ({ id: a._id, name: a.fullName, email: a.email, college: a.college })),
+    ...students.map((s) => ({ id: s._id, name: s.name, email: s.email, college: s.college, track: s.track, status: s.status })),
+    ...applications.map((a) => ({ id: a._id, name: a.fullName, email: a.email, college: a.college, track: a.programTrack, status: a.status })),
   ].filter((v, i, a) => a.findIndex((t) => t.email === v.email) === i);
 
   // Handle Password Authentication
@@ -393,6 +401,18 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 text-xs">
+            <button
+              onClick={() => {
+                loadAllAdminData();
+                triggerMessage('🔄 Live data refreshed from MongoDB database!');
+              }}
+              className="px-4 py-2 rounded-xl bg-[#0E8C93]/20 hover:bg-[#0E8C93]/40 text-[#38BDF8] border border-[#0E8C93]/40 font-semibold flex items-center gap-2 transition-all shadow-sm"
+              title="Fetch latest registrations from MongoDB"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              <span>Refresh Live Data</span>
+            </button>
+
             <button
               onClick={handleWipeAllStudentData}
               className="px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 font-semibold flex items-center gap-2 transition-all shadow-sm"

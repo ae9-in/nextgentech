@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       college: college || 'N/A',
       programTrack: programTrack || 'Full Stack App in 1 Day',
       slotDate: slotDate || 'Upcoming Saturday (10:00 AM - 6:00 PM)',
-      ticketId: ticketId || `NXT-SLOT-${Math.floor(100000 + Math.random() * 900000)}`,
+      ticketId: ticketId || `NGT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
       experienceLevel: experienceLevel || 'Beginner',
       status: 'CONFIRMED_SLOT',
       appliedAt: new Date(),
@@ -48,6 +48,19 @@ export async function POST(request: NextRequest) {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
+    } else {
+      await usersCol.updateOne(
+        { email },
+        {
+          $set: {
+            name: fullName,
+            phone: phone || existingUser.phone,
+            college: college || existingUser.college,
+            track: programTrack || existingUser.track,
+            updatedAt: new Date(),
+          },
+        }
+      );
     }
 
     return apiSuccess(
@@ -73,9 +86,11 @@ export async function GET(request: NextRequest) {
       phone: l.phone,
       college: l.college,
       programTrack: l.programTrack,
+      slotDate: l.slotDate || 'Upcoming Saturday',
+      ticketId: l.ticketId || `NGT-2026-${Math.floor(1000 + Math.random() * 9000)}`,
       experienceLevel: l.experienceLevel,
-      status: l.status,
-      appliedAt: l.appliedAt,
+      status: l.status || 'CONFIRMED_SLOT',
+      appliedAt: l.appliedAt || new Date(),
     }));
 
     return apiSuccess(formatted, 'Applications retrieved');
