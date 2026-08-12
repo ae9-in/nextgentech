@@ -611,36 +611,54 @@ export const CONTENT = {
 
   faqs: [
     {
-      question: "Are NextGen Tech 1-Day experiences really suitable for absolute beginners?",
-      answer: "Yes! Our 1-Day Experiences are structured step-by-step. We start with fundamental concepts and guide you through building a live application with step-by-step code templates and dedicated mentor assistance.",
+      category: 'Programs',
+      question: "What programs does NextGen Tech offer?",
+      answer: "We offer three core tracks: 1-Day Hands-On Experiences (build & deploy a real project in a single day), Simulated Developer Internships (4–6 weeks of real-world team workflows with code reviews, sprints & standups), and Intensive Bootcamps (multi-week deep-dive programs in Full Stack, AI/ML, Data Analytics, Cloud & DevOps, and UI/UX Design).",
     },
     {
+      category: 'Programs',
+      question: "Are these programs suitable for complete beginners with zero coding experience?",
+      answer: "Absolutely. Every program starts from fundamentals. Our 1-Day Experiences use guided, step-by-step code templates with dedicated mentor assistance. You'll have a working, deployed application by the end of the day — no prior coding knowledge required.",
+    },
+    {
+      category: 'Programs',
       question: "What is the difference between a 1-Day Experience, Internship, and Bootcamp?",
-      answer: "1-Day Experiences are fast-paced hands-on sprints where you build and deploy one specific project. Internships simulate 4+ weeks of real software team workflows (Jira tickets, PR code reviews, standups). Bootcamps are intensive multi-week comprehensive tracks covering deep technical domains.",
+      answer: "1-Day Experiences are fast-paced hands-on sprints where you build and deploy one specific project in a single session. Internships simulate 4–6 weeks of real software team workflows including Jira boards, GitHub pull requests, code reviews, and async standups. Bootcamps are intensive multi-week comprehensive programs covering deep technical domains with capstone projects and portfolio building.",
     },
     {
-      question: "Do I get a verified certificate upon completion?",
-      answer: "Absolutely. Every graduate receives an encrypted, verifiable digital certificate with a custom URL and QR code that can be embedded directly into LinkedIn profiles and resumes.",
+      category: 'Certificates',
+      question: "Do I receive a verified certificate upon completion?",
+      answer: "Yes. Every graduate receives an encrypted, blockchain-verifiable digital certificate with a unique certificate ID and QR code. You can embed it directly into your LinkedIn profile, resume, or portfolio. Employers and colleges can verify authenticity instantly via our online verification portal.",
     },
     {
-      question: "What hardware or software prerequisites do I need?",
-      answer: "All you need is a laptop (Windows, Mac, or Linux), Google Chrome or modern browser, stable internet connection, and free accounts on GitHub and Vercel. We provide all cloud development environments.",
+      category: 'Prerequisites',
+      question: "What hardware, software, or accounts do I need before joining?",
+      answer: "All you need is a laptop (Windows, macOS, or Linux), a modern browser (Chrome recommended), and a stable internet connection. We also ask you to create free accounts on GitHub, Vercel, and VS Code. All cloud development environments, tools, and resources are provided by us at no extra cost.",
     },
     {
-      question: "How does the simulated Developer Internship work?",
-      answer: "You join a Discord team room with 4-5 peers and a senior engineer mentor. You work on sprint tasks via a Kanban board, push code to GitHub, submit pull requests, attend async standups, and receive thorough code reviews.",
+      category: 'Internships',
+      question: "How does the Simulated Developer Internship work?",
+      answer: "You're placed in a team of 4–5 peers with a senior engineer as your mentor. Your team works in weekly sprints using a Kanban/Jira board, pushes code to GitHub repositories, submits pull requests for review, and participates in async daily standups. You receive detailed code review feedback, and your final capstone project goes into your professional portfolio.",
     },
     {
-      question: "What if I miss a live session or need extra help?",
-      answer: "All live sessions are recorded in HD and available in your student portal immediately. You also have 24/7 access to our active mentor Discord channels for code debugging.",
+      category: 'Support',
+      question: "What if I miss a live session or need extra help outside class hours?",
+      answer: "All live sessions are recorded in HD and available in your student portal within 1 hour. You also have 24/7 access to our active Discord community with dedicated mentor channels for real-time code debugging, doubt resolution, and peer collaboration.",
     },
     {
-      question: "Are there group discounts for college student batches?",
-      answer: "Yes! We offer special college group pricing and campus ambassador discounts for groups of 5+ students. Contact us or use our 'Partner With Us' form to request a group pass.",
+      category: 'Pricing',
+      question: "Are there group discounts for college batches or student clubs?",
+      answer: "Yes! We offer special college group pricing and campus ambassador discounts for groups of 5 or more students. We also partner with Training & Placement Officers (TPOs) for semester-integrated programs. Use our 'Partner With Us' form or contact us directly to request a custom group pass.",
     },
     {
+      category: 'Pricing',
       question: "What is the refund policy?",
-      answer: "We offer a 100% money-back guarantee for all 1-Day Experiences if you request a refund within 2 hours of the workshop start time.",
+      answer: "We offer a 100% money-back guarantee for all 1-Day Experiences if you request a refund within 2 hours of the workshop start time. For Internships and Bootcamps, a full refund is available within the first 48 hours of enrollment. No questions asked.",
+    },
+    {
+      category: 'Placements',
+      question: "Does NextGen Tech help with job placements or career support?",
+      answer: "While we don't guarantee placements, we provide end-to-end career support including resume building, LinkedIn profile optimization, portfolio reviews, mock interview sessions, and access to our hiring partner network. Many of our alumni have secured roles at startups, product companies, and service firms within weeks of completing our programs.",
     },
   ],
 
