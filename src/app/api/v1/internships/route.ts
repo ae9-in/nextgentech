@@ -7,6 +7,9 @@ import { handleApiError } from '@/lib/errors';
 import { createInternshipSchema, validateBody } from '@/lib/validate';
 import { CONTENT } from '@/config/content';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET: List available developer internships
 export async function GET(request: NextRequest) {
   try {

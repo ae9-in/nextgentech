@@ -5,6 +5,9 @@ import { requirePermission } from '@/lib/rbac';
 import { apiSuccess } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET: Single optimized endpoint for Admin Dashboard
 export async function GET(request: NextRequest) {
   try {

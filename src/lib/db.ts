@@ -1,35 +1,34 @@
 import { MongoClient, Db, Collection, Document } from 'mongodb';
 
-const DEFAULT_MONGO_URI = 'mongodb+srv://saivarshith4691_db_user:9CwJTISqMKOWta4C@clusternxtgen.ihza2b4.mongodb.net/nxtgentech?retryWrites=true&w=majority&appName=Clusternxtgen';
+const DEFAULT_MONGO_URI = 'mongodb+srv://saivarshith4691_db_user:9CwJTISqMKOWta4C@clusternxtgen.ihza2b4.mongodb.net/nxtgentech?retryWrites=true&w=majority&appName=Clusternxtgen&tls=true&tlsAllowInvalidCertificates=true';
 const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 const DB_NAME = 'nxtgentech';
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
+const mongoOptions = {
+  maxPoolSize: 10,
+  minPoolSize: 0,
+  maxIdleTimeMS: 30000,
+  connectTimeoutMS: 15000,
+  socketTimeoutMS: 45000,
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+  ssl: true,
+};
+
 if (process.env.NODE_ENV === 'development') {
   const globalWithMongo = global as typeof globalThis & {
     _mongoClientPromise?: Promise<MongoClient>;
   };
   if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri, {
-      maxPoolSize: 10,
-      minPoolSize: 2,
-      maxIdleTimeMS: 30000,
-      connectTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
-    });
+    client = new MongoClient(uri, mongoOptions);
     globalWithMongo._mongoClientPromise = client.connect();
   }
   clientPromise = globalWithMongo._mongoClientPromise;
 } else {
-  client = new MongoClient(uri, {
-    maxPoolSize: 20,
-    minPoolSize: 5,
-    maxIdleTimeMS: 30000,
-    connectTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-  });
+  client = new MongoClient(uri, mongoOptions);
   clientPromise = client.connect();
 }
 
