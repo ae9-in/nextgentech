@@ -77,23 +77,38 @@ export default function AdminDashboardPage() {
   const loadAllAdminData = async () => {
     setLoading(true);
     try {
-      const [appRes, userRes, dashRes, certRes] = await Promise.all([
-        fetch('/api/v1/applications').then((r) => r.json()).catch(() => ({ data: [] })),
-        fetch('/api/v1/users?role=STUDENT').then((r) => r.json()).catch(() => ({ data: [] })),
-        apiClient.get('/api/v1/admin/dashboard').catch(() => null),
-        fetch('/api/v1/certificates').then((r) => r.json()).catch(() => ({ data: [] })),
+      const timestamp = Date.now();
+      const [appRes, userRes, certRes] = await Promise.all([
+        fetch(`/api/v1/applications?t=${timestamp}`, { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ data: [] })),
+        fetch(`/api/v1/users?role=STUDENT&t=${timestamp}`, { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ data: [] })),
+        fetch(`/api/v1/certificates?t=${timestamp}`, { cache: 'no-store' }).then((r) => r.json()).catch(() => ({ data: [] })),
       ]);
 
-      if (appRes?.data) setApplications(appRes.data);
-      else if (Array.isArray(appRes)) setApplications(appRes);
+      // Read any locally submitted applications stored in browser localStorage
+      let localApps: any[] = [];
+      if (typeof window !== 'undefined') {
+        try {
+          const raw = localStorage.getItem('nxtgen_local_applications');
+          if (raw) localApps = JSON.parse(raw);
+        } catch (e) {}
+      }
+
+      let fetchedApps: any[] = [];
+      if (appRes?.data) fetchedApps = appRes.data;
+      else if (Array.isArray(appRes)) fetchedApps = appRes;
+
+      // Merge API applications with localStorage applications (unique by email or ticketId)
+      const mergedApps = [...fetchedApps, ...localApps].filter(
+        (v, i, a) => a.findIndex((t) => (t.ticketId && t.ticketId === v.ticketId) || (t.email && t.email === v.email)) === i
+      );
+
+      setApplications(mergedApps);
 
       if (userRes?.data) setStudents(userRes.data);
       else if (Array.isArray(userRes)) setStudents(userRes);
 
       if (certRes?.data) setIssuedCertificates(certRes.data);
       else if (Array.isArray(certRes)) setIssuedCertificates(certRes);
-
-      if (dashRes) setData(dashRes);
     } catch (err) {
       console.error('Failed to load admin dashboard:', err);
     } finally {

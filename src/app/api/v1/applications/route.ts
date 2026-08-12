@@ -3,6 +3,9 @@ import { getCollection, COLLECTIONS } from '@/lib/db';
 import { apiSuccess, apiError } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // POST: Public application submission from "Join NextGen Tech" modal / 1-Day slot booking
 export async function POST(request: NextRequest) {
   try {

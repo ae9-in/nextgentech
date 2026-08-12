@@ -33,8 +33,30 @@ export const JoinModal: React.FC<JoinModalProps> = ({
     e.preventDefault();
     setLoading(true);
 
-    const generatedTicket = `NXT-SLOT-${Math.floor(100000 + Math.random() * 900000)}`;
+    const generatedTicket = `NGT-2026-${Math.floor(1000 + Math.random() * 9000)}`;
     setTicketId(generatedTicket);
+
+    const newAppDoc = {
+      _id: `LOCAL-${Date.now()}`,
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      college: formData.college || 'NextGen Tech Student',
+      programTrack: formData.programTrack,
+      slotDate: formData.slotDate,
+      ticketId: generatedTicket,
+      experienceLevel: formData.experienceLevel || 'Beginner',
+      status: 'CONFIRMED_SLOT',
+      appliedAt: new Date().toISOString(),
+    };
+
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = localStorage.getItem('nxtgen_local_applications');
+        const existing = raw ? JSON.parse(raw) : [];
+        localStorage.setItem('nxtgen_local_applications', JSON.stringify([newAppDoc, ...existing]));
+      } catch (e) {}
+    }
 
     try {
       await fetch('/api/v1/applications', {

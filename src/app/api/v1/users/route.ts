@@ -7,6 +7,9 @@ import { handleApiError } from '@/lib/errors';
 import { registerSchema, validateBody } from '@/lib/validate';
 import { hashPassword } from '@/lib/auth';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET: List users with pagination and role filter
 export async function GET(request: NextRequest) {
   try {

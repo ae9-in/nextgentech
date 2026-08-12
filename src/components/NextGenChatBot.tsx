@@ -816,6 +816,29 @@ export function NextGenChatBot() {
       const finalSlot = text || 'Upcoming Saturday';
       const ticketId = 'NGT-2026-' + Math.floor(1000 + Math.random() * 9000);
 
+      const newAppDoc = {
+        _id: `LOCAL-${Date.now()}`,
+        fullName: finalName,
+        email: finalEmail,
+        phone: finalPhone,
+        college: finalCollege,
+        programTrack: finalTrack,
+        slotDate: finalSlot,
+        ticketId: ticketId,
+        experienceLevel: 'Beginner',
+        status: 'CONFIRMED_SLOT',
+        appliedAt: new Date().toISOString(),
+      };
+
+      // Save to localStorage as instant client fallback
+      if (typeof window !== 'undefined') {
+        try {
+          const raw = localStorage.getItem('nxtgen_local_applications');
+          const existing = raw ? JSON.parse(raw) : [];
+          localStorage.setItem('nxtgen_local_applications', JSON.stringify([newAppDoc, ...existing]));
+        } catch (e) {}
+      }
+
       try {
         const res = await fetch('/api/v1/applications', {
           method: 'POST',

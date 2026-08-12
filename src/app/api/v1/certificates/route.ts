@@ -3,6 +3,9 @@ import { getCollection, COLLECTIONS } from '@/lib/db';
 import { apiSuccess, parsePagination, apiPaginated } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET: List student certificates
 export async function GET(request: NextRequest) {
   try {
