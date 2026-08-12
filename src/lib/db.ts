@@ -1,11 +1,8 @@
 import { MongoClient, Db, Collection, Document } from 'mongodb';
 
-const uri = process.env.MONGODB_URI || '';
+const DEFAULT_MONGO_URI = 'mongodb+srv://saivarshith4691_db_user:9CwJTISqMKOWta4C@clusternxtgen.ihza2b4.mongodb.net/nxtgentech?retryWrites=true&w=majority&appName=Clusternxtgen';
+const uri = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 const DB_NAME = 'nxtgentech';
-
-if (!uri) {
-  throw new Error('MONGODB_URI environment variable is not set');
-}
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
