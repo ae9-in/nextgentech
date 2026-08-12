@@ -1,11 +1,19 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Space_Grotesk, Inter } from 'next/font/google';
 import './globals.css';
 import { UserProvider } from '@/context/UserContext';
+import { NextGenChatBot } from '@/components/NextGenChatBot';
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['500', '600', '700'],
+  display: 'swap',
+});
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-body',
   display: 'swap',
 });
 
@@ -31,11 +39,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} antialiased bg-[#0D1117] text-[#F5F7FA] min-h-screen selection:bg-[#3B82F6] selection:text-white`}
+        className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-[#FFFFFF] text-[#0A1E33] min-h-screen selection:bg-[#0E8C93] selection:text-white`}
       >
         <UserProvider>
           {children}
         </UserProvider>
+        <NextGenChatBot />
       </body>
     </html>
   );

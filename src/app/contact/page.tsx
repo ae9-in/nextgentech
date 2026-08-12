@@ -6,52 +6,52 @@ import { Footer } from '@/components/layout/Footer';
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#F5F7FA] selection:bg-[#3B82F6] selection:text-white font-sans">
+    <div className="min-h-screen bg-white text-[#0A1E33] selection:bg-[#0E8C93] selection:text-white font-sans">
       <Navbar />
 
       <main className="pt-32 pb-24">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center space-y-3">
-            <span className="text-xs font-mono font-semibold text-[#3B82F6] uppercase bg-[#161B22] px-3.5 py-1.5 rounded-md border border-[#30363D]">
+            <span className="text-xs font-sans font-semibold text-[#0E8C93] uppercase tracking-[0.18em]">
               GET IN TOUCH
             </span>
-            <h1 className="text-3xl font-extrabold text-[#F5F7FA]">Contact & Support</h1>
-            <p className="text-slate-400 text-xs font-normal">Have questions about our programs, student LMS, or campus partnerships?</p>
+            <h1 className="text-3xl sm:text-4xl font-display font-semibold text-[#0A1E33]">Contact & Support</h1>
+            <p className="text-[#4B6072] text-xs font-normal">Have questions about our 6 domain programs, student LMS, or campus partnerships?</p>
           </div>
 
-          <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-            <form className="space-y-4">
+          <div className="bg-white p-8 space-y-6 border border-[#E1E8E8] rounded-xl shadow-sm">
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Message sent successfully!'); }}>
               <div>
-                <label className="block text-xs font-mono font-semibold text-slate-400 mb-1">Your Name *</label>
+                <label className="block text-xs font-sans font-medium text-[#4B6072] mb-1">Your Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Ananya Patel"
-                  className="w-full px-4 py-2.5 rounded-lg bg-[#0D1117] border border-[#30363D] text-xs text-[#F5F7FA]"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white border border-[#E1E8E8] text-xs text-[#0A1E33] focus:outline-none focus:border-[#0E8C93]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-semibold text-slate-400 mb-1">Email Address *</label>
+                <label className="block text-xs font-sans font-medium text-[#4B6072] mb-1">Email Address *</label>
                 <input
                   type="email"
                   required
                   placeholder="student@college.edu"
-                  className="w-full px-4 py-2.5 rounded-lg bg-[#0D1117] border border-[#30363D] text-xs text-[#F5F7FA]"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white border border-[#E1E8E8] text-xs text-[#0A1E33] focus:outline-none focus:border-[#0E8C93]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-semibold text-slate-400 mb-1">Message *</label>
+                <label className="block text-xs font-sans font-medium text-[#4B6072] mb-1">Message *</label>
                 <textarea
                   rows={4}
                   required
                   placeholder="How can we help you?"
-                  className="w-full px-4 py-2.5 rounded-lg bg-[#0D1117] border border-[#30363D] text-xs text-[#F5F7FA]"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white border border-[#E1E8E8] text-xs text-[#0A1E33] focus:outline-none focus:border-[#0E8C93]"
                 />
               </div>
 
-              <button type="submit" className="btn-primary w-full py-3 text-xs font-semibold">
+              <button type="submit" className="w-full py-3 text-xs font-medium bg-[#F2803A] hover:bg-[#E06A24] text-white rounded-lg transition-colors">
                 Send Message →
               </button>
             </form>

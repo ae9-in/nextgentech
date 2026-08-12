@@ -1,53 +1,37 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { Building2, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { CollegePartners } from '@/components/sections/CollegePartners';
+import { PartnerModal } from '@/components/modals/PartnerModal';
 
 export default function CollegesPage() {
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#F5F7FA] selection:bg-[#3B82F6] selection:text-white font-sans">
+    <div className="min-h-screen bg-white text-[#0A1E33] selection:bg-[#0E8C93] selection:text-white font-sans">
       <Navbar />
 
-      <main className="pt-32 pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <main className="pt-32 pb-24 space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="text-xs font-mono font-semibold text-[#3B82F6] uppercase bg-[#161B22] px-3.5 py-1.5 rounded-md border border-[#30363D]">
-              INSTITUTION PARTNERSHIPS
+            <span className="text-xs font-sans font-semibold text-[#0E8C93] uppercase tracking-[0.18em]">
+              CAMPUS & INSTITUTION PARTNERSHIPS
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-[#F5F7FA]">
+            <h1 className="text-4xl sm:text-5xl font-display font-semibold text-[#0A1E33]">
               For Colleges & Universities
             </h1>
-            <p className="text-slate-400 text-base font-normal">
-              Empower your campus students with hands-on 1-day workshops, simulated internships, and industry capstone projects.
+            <p className="text-[#4B6072] text-base font-normal leading-relaxed">
+              Empower your campus students with hands-on 1-day workshops, simulated domain internships, and institutional placement support.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-              <h3 className="text-2xl font-extrabold text-[#F5F7FA]">Campus Hackathons & Workshops</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                Bring 8-hour live coding experiences directly to your engineering college campus with certified mentors.
-              </p>
-              <Link href="/contact" className="btn-primary inline-flex px-6 py-2.5 text-xs font-semibold">
-                Schedule Campus Workshop →
-              </Link>
-            </div>
-
-            <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-              <h3 className="text-2xl font-extrabold text-[#F5F7FA]">Institutional Placement Support</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                Track student cohort progress, project scores, and verified developer credentials through dedicated institutional portals.
-              </p>
-              <Link href="/contact" className="btn-primary inline-flex px-6 py-2.5 text-xs font-semibold">
-                Partner With Us →
-              </Link>
-            </div>
-          </div>
         </div>
+
+        <CollegePartners onPartnerClick={() => setIsPartnerModalOpen(true)} />
       </main>
+
+      <PartnerModal isOpen={isPartnerModalOpen} onClose={() => setIsPartnerModalOpen(false)} />
 
       <Footer />
     </div>

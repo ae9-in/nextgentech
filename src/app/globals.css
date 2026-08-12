@@ -3,103 +3,131 @@
 @tailwind utilities;
 
 :root {
-  --background: #0D1117;
-  --foreground: #F5F7FA;
-  --surface-card: #161B22;
-  --surface-secondary: #1F2937;
-  --accent-blue: #3B82F6;
-  --border-color: #30363D;
+  /* Base */
+  --color-bg: #FFFFFF;            /* page background */
+  --color-bg-soft: #F4F8F8;       /* section alt background, faint teal tint */
+  --color-paper: #FFFFFF;         /* card surface */
+
+  /* Navy */
+  --color-navy-950: #0A1E33;      /* headlines, footer bg */
+  --color-navy-800: #0F2A45;
+  --color-navy-600: #1B3F60;
+  --color-navy-300: #6E859B;      /* muted text on light */
+
+  /* Teal — primary brand */
+  --color-teal-700: #0B6E74;
+  --color-teal-500: #0E8C93;      /* primary brand teal */
+  --color-teal-300: #7FC4C8;
+  --color-teal-100: #E4F3F3;      /* soft teal tint backgrounds/chips */
+
+  /* Orange — action accent, used sparingly */
+  --color-orange-600: #E06A24;
+  --color-orange-500: #F2803A;    /* CTA fill */
+  --color-orange-100: #FDE9DC;
+
+  /* Text */
+  --color-text-primary: #0A1E33;
+  --color-text-secondary: #4B6072;
+  --color-text-inverse: #FFFFFF;
+
+  /* Borders */
+  --color-hairline: #E1E8E8;
 }
 
 body {
-  background-color: #0D1117;
-  color: #F5F7FA;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body), 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Large Minimal White Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Inter', system-ui, sans-serif;
-  letter-spacing: -0.03em;
-  color: #F5F7FA;
+  font-family: var(--font-display), 'Space Grotesk', sans-serif;
+  letter-spacing: -0.02em;
+  color: var(--color-navy-950);
 }
 
-/* Minimalist Clean Buttons — Blue ONLY for Action Links/Buttons */
+/* Signal Brand Buttons */
 .btn-primary {
-  background-color: #3B82F6;
-  color: #FFFFFF;
+  background-color: var(--color-orange-500);
+  color: var(--color-text-inverse);
   border-radius: 8px;
-  font-weight: 600;
-  border: 1px solid #3B82F6;
-  transition: all 0.15s ease;
+  font-weight: 500;
+  border: 1px solid var(--color-orange-500);
+  transition: all 0.2s ease;
 }
 .btn-primary:hover {
-  background-color: #2563EB;
-  border-color: #2563EB;
+  background-color: var(--color-orange-600);
+  border-color: var(--color-orange-600);
 }
 
 .btn-secondary {
-  background-color: #161B22;
-  color: #F5F7FA;
-  border: 1px solid #30363D;
+  background-color: transparent;
+  color: var(--color-navy-950);
+  border: 1px solid var(--color-navy-950);
   border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.15s ease;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 .btn-secondary:hover {
-  background-color: #1F2937;
-  border-color: #484F58;
-  color: #FFFFFF;
+  background-color: var(--color-navy-950);
+  color: var(--color-text-inverse);
 }
 
 .btn-accent {
-  background-color: #3B82F6;
-  color: #FFFFFF;
+  background-color: var(--color-teal-500);
+  color: var(--color-text-inverse);
   border-radius: 8px;
-  font-weight: 600;
-  border: 1px solid #3B82F6;
-  transition: all 0.15s ease;
+  font-weight: 500;
+  border: 1px solid var(--color-teal-500);
+  transition: all 0.2s ease;
 }
 .btn-accent:hover {
-  background-color: #2563EB;
+  background-color: var(--color-teal-700);
+  border-color: var(--color-teal-700);
 }
 
-/* Clean Minimal Card Containers (Thin Borders, Subtle Dark Surface) */
-.card-glass-light, .card-white {
-  background: #161B22;
-  border: 1px solid #30363D;
+/* Card Containers */
+.card-glass-light, .card-white, .card-glass-dark, .card-clean {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-hairline);
   border-radius: 12px;
-  color: #F5F7FA;
-  transition: border-color 0.15s ease;
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 3px 0 rgba(10, 30, 51, 0.05);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.card-glass-light:hover, .card-white:hover {
-  border-color: #484F58;
-}
-
-.card-glass-dark {
-  background: #161B22;
-  border: 1px solid #30363D;
-  border-radius: 12px;
-  color: #F5F7FA;
+.card-glass-light:hover, .card-white:hover, .card-glass-dark:hover, .card-clean:hover {
+  border-color: var(--color-teal-300);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px -2px rgba(14, 140, 147, 0.12);
 }
 
-.card-clean {
-  background: #161B22;
-  border: 1px solid #30363D;
-  border-radius: 12px;
-  color: #F5F7FA;
-}
-
+/* Soft-Fill Chips (Teal 100) */
 .tech-pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
   font-size: 11px;
-  font-family: monospace;
-  font-weight: 600;
-  background: #1F2937;
-  color: #3B82F6;
-  border: 1px solid #30363D;
+  font-family: var(--font-body), 'Inter', sans-serif;
+  font-weight: 500;
+  background-color: var(--color-teal-100);
+  color: var(--color-teal-700);
+  border: none;
+}
+
+/* Chatbot slide-in animation */
+.animate-in {
+  animation: chatSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes chatSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

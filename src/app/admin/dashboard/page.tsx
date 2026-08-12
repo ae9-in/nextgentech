@@ -25,6 +25,13 @@ import {
   Printer,
   CheckCircle2,
   FileCheck,
+  Trash2,
+  RefreshCw,
+  Search,
+  ExternalLink,
+  ChevronRight,
+  TrendingUp,
+  Activity,
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -42,6 +49,7 @@ export default function AdminDashboardPage() {
   const [issuedCertificates, setIssuedCertificates] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'students' | 'certificates'>('overview');
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Custom Certificate Generation Form State
   const [certStudentName, setCertStudentName] = useState('');
@@ -133,25 +141,6 @@ export default function AdminDashboardPage() {
     setTimeout(() => setActionSuccessMsg(''), 4000);
   };
 
-  const handleCreateCourse = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCourseTitle.trim()) return;
-    try {
-      await apiClient.post('/api/v1/courses', {
-        title: newCourseTitle,
-        category: newCourseCategory,
-        level: 'Beginner',
-        price: 999,
-        published: true,
-      });
-      setNewCourseTitle('');
-      triggerMessage(`✅ Course "${newCourseTitle}" created and published live!`);
-      loadAllAdminData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to create course');
-    }
-  };
-
   // Generate & Issue Custom Certificate
   const handleGenerateCertificate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,36 +201,40 @@ export default function AdminDashboardPage() {
   // IF LOCKED: Display Password Security Gateway Screen
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen bg-[#0D1117] text-[#F5F7FA] flex items-center justify-center p-4 selection:bg-[#3B82F6] selection:text-white font-sans">
-        <div className="max-w-md w-full bg-[#161B22] border border-[#30363D] rounded-2xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-[#3B82F6]" />
+      <div className="min-h-screen bg-[#071321] text-white flex items-center justify-center p-4 selection:bg-[#0E8C93] selection:text-white font-sans relative overflow-hidden">
+        {/* Ambient Glow Effects */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#0E8C93]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#F2803A]/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-md w-full bg-[#0A1E33]/90 backdrop-blur-xl border border-[#0E8C93]/30 rounded-2xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0E8C93] via-[#38BDF8] to-[#F2803A]" />
 
           <div className="text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-[#1F2937] text-[#3B82F6] flex items-center justify-center mx-auto border border-[#30363D] shadow-inner">
-              <ShieldCheck className="w-7 h-7 text-[#3B82F6]" />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0E8C93] to-[#0A6E74] text-white flex items-center justify-center mx-auto border border-white/20 shadow-lg shadow-[#0E8C93]/30">
+              <ShieldCheck className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-extrabold text-white tracking-tight">
-              Admin Portal Security
+            <h1 className="text-2xl font-bold text-white tracking-tight">
+              NextGen Admin Console
             </h1>
-            <p className="text-xs text-slate-400 font-mono">
+            <p className="text-xs text-slate-300 font-sans">
               Enter master administrator password to unlock console.
             </p>
           </div>
 
           {authError && (
-            <div className="p-3.5 rounded-xl bg-red-950/80 border border-red-500/40 text-red-300 text-xs font-mono font-bold flex items-center gap-2">
+            <div className="p-3.5 rounded-xl bg-red-950/80 border border-red-500/40 text-red-300 text-xs font-sans font-medium flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
               <span>{authError}</span>
             </div>
           )}
 
           <form onSubmit={handleUnlockAdmin} className="space-y-4">
-            <div className="space-y-1">
-              <label className="block text-[11px] font-mono font-semibold text-slate-300 uppercase tracking-wider">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
                 Admin Password *
               </label>
               <div className="relative">
-                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <KeyRound className="w-4 h-4 text-[#0E8C93] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
                   required
@@ -249,24 +242,24 @@ export default function AdminDashboardPage() {
                   placeholder="Enter password..."
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0D1117] border border-[#30363D] focus:border-[#3B82F6] text-white text-sm outline-none transition-colors font-mono"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#071321]/80 border border-[#0E8C93]/40 focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8]/40 text-white text-sm outline-none transition-all placeholder:text-slate-500 font-sans"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-3 px-6 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
+              className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#F2803A] to-[#E06A24] hover:from-[#E06A24] hover:to-[#F2803A] text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#F2803A]/25 border border-white/10"
             >
               <span>Unlock Admin Console</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <div className="pt-4 border-t border-[#30363D] text-center">
+          <div className="pt-4 border-t border-white/10 text-center">
             <Link
               href="/"
-              className="text-xs font-mono text-slate-400 hover:text-white transition-colors"
+              className="text-xs font-medium text-slate-400 hover:text-white transition-colors"
             >
               ← Return to Main Website
             </Link>
@@ -276,70 +269,90 @@ export default function AdminDashboardPage() {
     );
   }
 
+  // Filter lists based on search query
+  const filteredApplications = applications.filter((app) =>
+    (app.fullName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (app.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (app.phone || '').includes(searchQuery) ||
+    (app.programTrack || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredStudents = combinedStudentsList.filter((s) =>
+    (s.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (s.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (s.college || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredCertificates = issuedCertificates.filter((c) =>
+    (c.studentName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (c.certificateId || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (c.programName || '').toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // IF UNLOCKED: Render Full Admin Dashboard Console
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#F5F7FA] selection:bg-[#3B82F6] selection:text-white font-sans flex">
+    <div className="min-h-screen bg-[#071321] text-white selection:bg-[#0E8C93] selection:text-white font-sans flex">
       {/* Sidebar Admin Navigation */}
-      <aside className="w-64 bg-[#161B22] border-r border-[#30363D] flex flex-col justify-between p-6 shrink-0 hidden md:flex">
+      <aside className="w-64 bg-[#0A1E33]/95 border-r border-[#0E8C93]/20 flex flex-col justify-between p-6 shrink-0 hidden md:flex backdrop-blur-xl">
         <div className="space-y-8">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#3B82F6] text-white flex items-center justify-center font-bold text-lg">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0E8C93] to-[#0A6E74] text-white flex items-center justify-center font-bold text-lg shadow-md shadow-[#0E8C93]/30 border border-white/10">
               N
             </div>
             <div>
-              <h2 className="font-extrabold text-[#F5F7FA] text-sm tracking-tight">Admin Portal</h2>
-              <p className="text-[10px] font-mono text-slate-400">NextGen Control Hub</p>
+              <h2 className="font-bold text-white text-sm tracking-tight">Admin Portal</h2>
+              <p className="text-[11px] text-[#7FC4C8]">NextGen Control Hub</p>
             </div>
           </div>
 
-          <nav className="space-y-1 font-mono text-xs">
+          <nav className="space-y-1.5 text-xs font-medium">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-colors text-left ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
                 activeTab === 'overview'
-                  ? 'bg-[#3B82F6] text-white font-bold'
-                  : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#0E8C93] to-[#0A6E74] text-white font-bold shadow-md shadow-[#0E8C93]/25 border border-white/15'
+                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
               }`}
             >
-              <LayoutDashboard className="w-4 h-4" />
+              <LayoutDashboard className="w-4 h-4 text-[#38BDF8]" />
               <span>Overview</span>
             </button>
 
             <button
               onClick={() => setActiveTab('applications')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-colors text-left justify-between ${
+              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left ${
                 activeTab === 'applications'
-                  ? 'bg-[#3B82F6] text-white font-bold'
-                  : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#0E8C93] to-[#0A6E74] text-white font-bold shadow-md shadow-[#0E8C93]/25 border border-white/15'
+                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
               }`}
             >
               <div className="flex items-center gap-3">
-                <Inbox className="w-4 h-4" />
+                <Inbox className="w-4 h-4 text-[#38BDF8]" />
                 <span>Slot Applications</span>
               </div>
-              <span className="px-2 py-0.5 rounded bg-blue-900/80 text-blue-200 text-[10px] font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-[#38BDF8]/20 text-[#38BDF8] text-[10px] font-bold border border-[#38BDF8]/30">
                 {applications.length}
               </span>
             </button>
 
             <button
               onClick={() => setActiveTab('students')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-colors text-left ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
                 activeTab === 'students'
-                  ? 'bg-[#3B82F6] text-white font-bold'
-                  : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#0E8C93] to-[#0A6E74] text-white font-bold shadow-md shadow-[#0E8C93]/25 border border-white/15'
+                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
               }`}
             >
-              <Users className="w-4 h-4" />
+              <Users className="w-4 h-4 text-[#38BDF8]" />
               <span>Student Roster</span>
             </button>
 
             <button
               onClick={() => setActiveTab('certificates')}
-              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg transition-colors text-left ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
                 activeTab === 'certificates'
-                  ? 'bg-[#3B82F6] text-white font-bold'
-                  : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#0E8C93] to-[#0A6E74] text-white font-bold shadow-md shadow-[#0E8C93]/25 border border-white/15'
+                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
               }`}
             >
               <Award className="w-4 h-4 text-amber-400" />
@@ -348,18 +361,18 @@ export default function AdminDashboardPage() {
           </nav>
         </div>
 
-        <div className="pt-6 border-t border-[#30363D] space-y-2">
+        <div className="pt-6 border-t border-white/10 space-y-2">
           <button
             onClick={handleLockConsole}
-            className="w-full flex items-center gap-3 px-3 py-2 text-xs font-mono text-amber-400 hover:bg-amber-950/40 rounded-lg transition-colors text-left font-bold border border-amber-500/30"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/10 rounded-xl transition-colors text-left border border-amber-500/30"
           >
-            <Lock className="w-4 h-4 shrink-0" />
+            <Lock className="w-4 h-4 shrink-0 text-amber-400" />
             <span>Lock Admin Console</span>
           </button>
 
           <Link
             href="/"
-            className="flex items-center gap-3 px-3 py-2 text-xs font-mono text-slate-400 hover:text-white transition-colors"
+            className="flex items-center gap-3 px-3.5 py-2.5 text-xs font-medium text-slate-400 hover:text-white transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span>Return to Site</span>
@@ -368,141 +381,237 @@ export default function AdminDashboardPage() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-6 md:p-10 space-y-8 overflow-y-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#30363D] pb-6">
+      <main className="flex-1 p-6 md:p-10 space-y-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        {/* Top Header Row */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <span className="text-xs font-mono font-semibold text-[#3B82F6] uppercase tracking-widest">
-              SUPER ADMIN DASHBOARD
+            <span className="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-widest flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#38BDF8]" />
+              <span>SUPER ADMIN CONTROL PANEL</span>
             </span>
-            <h1 className="text-3xl font-extrabold text-[#F5F7FA] mt-2">Platform Administration</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">Platform Administration</h1>
           </div>
 
-          <div className="flex items-center gap-3 text-xs font-mono">
+          <div className="flex flex-wrap items-center gap-3 text-xs">
             <button
               onClick={handleWipeAllStudentData}
-              className="px-3.5 py-1.5 rounded-lg bg-red-950/70 text-red-300 hover:bg-red-900 border border-red-800 font-bold flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 rounded-xl bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 font-semibold flex items-center gap-2 transition-all shadow-sm"
               title="Clear all test student data from database"
             >
-              <LogOut className="w-3.5 h-3.5 text-red-400" />
+              <Trash2 className="w-3.5 h-3.5 text-red-400" />
               <span>Clear Student Data</span>
             </button>
 
             <button
               onClick={handleLockConsole}
-              className="px-3.5 py-1.5 rounded-lg bg-amber-950/60 text-amber-300 border border-amber-800 font-bold flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 font-semibold flex items-center gap-2 transition-all shadow-sm"
             >
               <Lock className="w-3.5 h-3.5 text-amber-400" />
               <span>Lock Console</span>
             </button>
 
-            <span className="px-3.5 py-1.5 rounded-lg bg-[#161B22] text-emerald-400 border border-[#30363D] font-semibold flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="px-4 py-2 rounded-xl bg-[#0A1E33] text-emerald-400 border border-[#0E8C93]/30 font-semibold flex items-center gap-2 shadow-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>MongoDB Connected</span>
             </span>
           </div>
         </div>
 
+        {/* Global Search Bar */}
+        <div className="relative">
+          <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search students, applications, ticket IDs, or certificates..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0A1E33]/70 border border-[#0E8C93]/30 focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8]/30 text-white text-xs outline-none transition-all placeholder:text-slate-400"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
         {actionSuccessMsg && (
-          <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D] text-[#F5F7FA] text-xs font-mono font-bold shadow-md">
-            {actionSuccessMsg}
+          <div className="p-4 rounded-xl bg-[#0E8C93]/20 border border-[#0E8C93]/40 text-white text-xs font-semibold shadow-md flex items-center gap-3">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{actionSuccessMsg}</span>
           </div>
         )}
+
+        {/* Mobile Navigation Tabs */}
+        <div className="flex md:hidden gap-2 overflow-x-auto pb-2 border-b border-white/10 text-xs font-medium">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`px-4 py-2 rounded-xl whitespace-nowrap ${
+              activeTab === 'overview' ? 'bg-[#0E8C93] text-white font-bold' : 'bg-[#0A1E33] text-slate-300'
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('applications')}
+            className={`px-4 py-2 rounded-xl whitespace-nowrap ${
+              activeTab === 'applications' ? 'bg-[#0E8C93] text-white font-bold' : 'bg-[#0A1E33] text-slate-300'
+            }`}
+          >
+            Applications ({applications.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('students')}
+            className={`px-4 py-2 rounded-xl whitespace-nowrap ${
+              activeTab === 'students' ? 'bg-[#0E8C93] text-white font-bold' : 'bg-[#0A1E33] text-slate-300'
+            }`}
+          >
+            Students ({combinedStudentsList.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('certificates')}
+            className={`px-4 py-2 rounded-xl whitespace-nowrap ${
+              activeTab === 'certificates' ? 'bg-[#0E8C93] text-white font-bold' : 'bg-[#0A1E33] text-slate-300'
+            }`}
+          >
+            Certificates ({issuedCertificates.length})
+          </button>
+        </div>
 
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-              <div className="card-glass-dark p-6 space-y-2 bg-[#161B22] border border-[#30363D]">
-                <p className="text-xs font-mono text-slate-400 uppercase">1-Day Applications</p>
-                <p className="text-3xl font-extrabold text-blue-400">
-                  {loading ? '...' : applications.length}
-                </p>
-                <p className="text-[11px] text-slate-400 font-mono">Live Form Submissions</p>
+            {/* Stat Cards Grid — Sleek Dark Glass Aesthetics */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Stat Card 1 */}
+              <div className="p-6 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-3 relative overflow-hidden group hover:border-[#0E8C93] transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">1-Day Applications</span>
+                  <div className="w-9 h-9 rounded-xl bg-[#0E8C93]/20 text-[#38BDF8] flex items-center justify-center">
+                    <Inbox className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-extrabold text-white">
+                    {loading ? '...' : applications.length}
+                  </span>
+                  <span className="text-[11px] font-semibold text-emerald-400 flex items-center gap-0.5">
+                    <TrendingUp className="w-3 h-3" /> Live
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400">Live Form Submissions</p>
               </div>
 
-              <div className="card-glass-dark p-6 space-y-2 bg-[#161B22] border border-[#30363D]">
-                <p className="text-xs font-mono text-slate-400 uppercase">Total Students</p>
-                <p className="text-3xl font-extrabold text-[#F5F7FA]">
-                  {loading ? '...' : combinedStudentsList.length}
-                </p>
-                <p className="text-[11px] text-[#3B82F6] font-mono">Registered Roster</p>
+              {/* Stat Card 2 */}
+              <div className="p-6 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-3 relative overflow-hidden group hover:border-[#0E8C93] transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Students</span>
+                  <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                    <Users className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-extrabold text-white">
+                    {loading ? '...' : combinedStudentsList.length}
+                  </span>
+                  <span className="text-[11px] font-semibold text-[#38BDF8]">Registered Roster</span>
+                </div>
+                <p className="text-[11px] text-slate-400">Active Learners</p>
               </div>
 
-              <div className="card-glass-dark p-6 space-y-2 bg-[#161B22] border border-[#30363D]">
-                <p className="text-xs font-mono text-slate-400 uppercase">Certificates Issued</p>
-                <p className="text-3xl font-extrabold text-amber-400">
-                  {loading ? '...' : issuedCertificates.length}
-                </p>
-                <p className="text-[11px] text-slate-400 font-mono">Verified Credentials</p>
+              {/* Stat Card 3 */}
+              <div className="p-6 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-3 relative overflow-hidden group hover:border-[#0E8C93] transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Certificates Issued</span>
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                    <Award className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-extrabold text-amber-400">
+                    {loading ? '...' : issuedCertificates.length}
+                  </span>
+                  <span className="text-[11px] font-semibold text-amber-300">Verified Credentials</span>
+                </div>
+                <p className="text-[11px] text-slate-400">QR Verified Links</p>
               </div>
 
-              <div className="card-glass-dark p-6 space-y-2 bg-[#161B22] border border-[#30363D]">
-                <p className="text-xs font-mono text-slate-400 uppercase">Total Revenue</p>
-                <p className="text-3xl font-extrabold text-[#F5F7FA]">
-                  {loading ? '...' : data?.stats?.totalRevenue ?? '₹0.0L'}
-                </p>
-                <p className="text-[11px] text-[#3B82F6] font-mono">Verified Receipts</p>
+              {/* Stat Card 4 */}
+              <div className="p-6 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-3 relative overflow-hidden group hover:border-[#0E8C93] transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Revenue</span>
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <Activity className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-extrabold text-white">
+                    {loading ? '...' : data?.stats?.totalRevenue ?? '₹0.0L'}
+                  </span>
+                  <span className="text-[11px] font-semibold text-emerald-400">Verified Receipts</span>
+                </div>
+                <p className="text-[11px] text-slate-400">Platform Payments</p>
               </div>
             </div>
 
             {/* CUSTOM CERTIFICATE GENERATOR & PREVIEW */}
-            <div className="card-glass-dark p-8 bg-[#161B22] border border-[#30363D] rounded-2xl space-y-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-[#30363D] pb-4">
+            <div className="p-8 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 pb-5">
                 <div>
-                  <h3 className="text-lg font-extrabold text-[#F5F7FA] flex items-center gap-2">
-                    <Award className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
+                    <Award className="w-6 h-6 text-amber-400 shrink-0" />
                     <span>Instant Custom Certificate Generator</span>
                   </h3>
-                  <p className="text-xs text-slate-400 font-mono">
-                    Enter student name and details to automatically generate and issue a verified NextGen Tech credential.
+                  <p className="text-xs text-slate-300 mt-1">
+                    Select a student name and program details to generate a verified NextGen Tech credential.
                   </p>
                 </div>
-                <span className="px-3 py-1 rounded bg-amber-950/80 text-amber-300 text-xs font-mono font-bold border border-amber-800">
+                <span className="px-3.5 py-1.5 rounded-full bg-amber-500/15 text-amber-300 text-xs font-semibold border border-amber-500/30">
                   Auto-Generated Pass ID
                 </span>
               </div>
 
-              <form onSubmit={handleGenerateCertificate} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1 uppercase tracking-wider text-[11px]">
+              <form onSubmit={handleGenerateCertificate} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs font-sans">
+                <div className="space-y-2">
+                  <label className="block text-slate-200 font-semibold uppercase tracking-wider text-[11px]">
                     1. Select Registered Student OR Type Name
                   </label>
-                  <div className="space-y-2">
-                    <select
-                      value={certStudentName}
-                      onChange={(e) => setCertStudentName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white focus:outline-none focus:border-[#3B82F6]"
-                    >
-                      <option value="">-- Pick from Registered Students --</option>
-                      {combinedStudentsList.map((s, idx) => (
-                        <option key={idx} value={s.name}>
-                          {s.name} ({s.email})
-                        </option>
-                      ))}
-                    </select>
+                  <select
+                    value={certStudentName}
+                    onChange={(e) => setCertStudentName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
+                  >
+                    <option value="">-- Pick from Registered Students --</option>
+                    {combinedStudentsList.map((s, idx) => (
+                      <option key={idx} value={s.name}>
+                        {s.name} ({s.email})
+                      </option>
+                    ))}
+                  </select>
 
-                    <input
-                      type="text"
-                      placeholder="Or type custom name (e.g. Sai Varshith)..."
-                      value={certStudentName}
-                      onChange={(e) => setCertStudentName(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white placeholder-slate-500 focus:outline-none focus:border-[#3B82F6]"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    placeholder="Or type custom name (e.g. Rahul Sharma)..."
+                    value={certStudentName}
+                    onChange={(e) => setCertStudentName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white placeholder:text-slate-500 focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1 uppercase tracking-wider text-[11px]">
+                <div className="space-y-2">
+                  <label className="block text-slate-200 font-semibold uppercase tracking-wider text-[11px]">
                     2. Program / Track Title
                   </label>
                   <select
                     value={certProgramName}
                     onChange={(e) => setCertProgramName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white focus:outline-none focus:border-[#3B82F6] mb-2"
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
                   >
                     <option value="1-Day Full Stack MERN Experience">1-Day Full Stack MERN Experience</option>
                     <option value="1-Day AI Agent & LLM Builder">1-Day AI Agent & LLM Builder</option>
-                    <option value="Simulated Engineering Internship">Simulated Engineering Internship Track</option>
+                    <option value="Simulated Engineering Internship Track">Simulated Engineering Internship Track</option>
                     <option value="7-Day Intensive Web Development Bootcamp">7-Day Intensive Web Development Bootcamp</option>
                   </select>
 
@@ -511,18 +620,18 @@ export default function AdminDashboardPage() {
                     placeholder="Custom track name..."
                     value={certProgramName}
                     onChange={(e) => setCertProgramName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white focus:outline-none focus:border-[#3B82F6]"
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1 uppercase tracking-wider text-[11px]">
+                <div className="space-y-2">
+                  <label className="block text-slate-200 font-semibold uppercase tracking-wider text-[11px]">
                     3. Certificate Type & Date
                   </label>
                   <select
                     value={certType}
                     onChange={(e) => setCertType(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white focus:outline-none focus:border-[#3B82F6] mb-2"
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
                   >
                     <option value="1-Day Experience Credential">1-Day Experience Credential</option>
                     <option value="Certificate of Excellence">Certificate of Excellence</option>
@@ -534,16 +643,16 @@ export default function AdminDashboardPage() {
                     type="date"
                     value={certIssueDate}
                     onChange={(e) => setCertIssueDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0D1117] border border-[#30363D] text-white focus:outline-none focus:border-[#3B82F6]"
+                    className="w-full px-4 py-3 rounded-xl bg-[#071321] border border-[#0E8C93]/40 text-white focus:border-[#38BDF8] outline-none transition-all text-xs font-sans"
                   />
                 </div>
 
-                <div className="md:col-span-2 lg:col-span-3 pt-2 flex flex-col sm:flex-row gap-3">
+                <div className="md:col-span-2 lg:col-span-3 pt-2">
                   <button
                     type="submit"
-                    className="flex-1 py-3 px-6 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs font-mono transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
+                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#F2803A] to-[#E06A24] hover:from-[#E06A24] hover:to-[#F2803A] text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#F2803A]/25 border border-white/10"
                   >
-                    <Award className="w-4 h-4 text-amber-300" />
+                    <Award className="w-4 h-4 text-amber-200" />
                     <span>Generate & Issue Certificate →</span>
                   </button>
                 </div>
@@ -551,42 +660,42 @@ export default function AdminDashboardPage() {
 
               {/* LIVE GENERATED CERTIFICATE PREVIEW CARD */}
               {generatedCert && (
-                <div className="pt-6 border-t border-[#30363D] space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono font-bold text-amber-400 flex items-center gap-2">
+                <div className="pt-6 border-t border-white/10 space-y-4">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <span className="text-xs font-bold text-amber-300 flex items-center gap-2">
                       <FileCheck className="w-4 h-4" />
                       <span>LIVE CERTIFICATE GENERATED (SAVED IN DATABASE)</span>
                     </span>
                     <button
                       onClick={() => window.print()}
-                      className="px-4 py-1.5 rounded-lg bg-[#1F2937] hover:bg-[#374151] text-white text-xs font-mono font-bold border border-[#30363D] flex items-center gap-2"
+                      className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/20 flex items-center gap-2 transition-all"
                     >
-                      <Printer className="w-3.5 h-3.5 text-blue-400" />
+                      <Printer className="w-4 h-4 text-[#38BDF8]" />
                       <span>Print / Download Certificate PDF</span>
                     </button>
                   </div>
 
                   {/* PREMIUM CERTIFICATE CARD DISPLAY */}
-                  <div className="p-8 rounded-2xl bg-[#0D1117] border-2 border-amber-500/40 text-center space-y-6 relative overflow-hidden shadow-2xl font-serif">
+                  <div className="p-8 rounded-2xl bg-[#071321] border-2 border-amber-500/50 text-center space-y-6 relative overflow-hidden shadow-2xl">
                     <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600" />
 
-                    <div className="flex justify-between items-center border-b border-amber-500/20 pb-4 font-mono text-xs">
-                      <span className="font-extrabold tracking-widest text-[#F5F7FA] flex items-center gap-2">
-                        <div className="w-6 h-6 rounded bg-[#3B82F6] text-white flex items-center justify-center font-extrabold text-xs">N</div>
+                    <div className="flex justify-between items-center border-b border-amber-500/20 pb-4 text-xs font-mono">
+                      <span className="font-bold text-white flex items-center gap-2 tracking-wider">
+                        <div className="w-6 h-6 rounded bg-[#0E8C93] text-white flex items-center justify-center font-extrabold text-xs">N</div>
                         NEXTGEN TECH CERTIFICATION AUTHORITY
                       </span>
                       <span className="text-amber-400 font-bold">PASS ID: {generatedCert.certificateId}</span>
                     </div>
 
                     <div className="space-y-2 py-4">
-                      <p className="text-xs uppercase font-mono tracking-widest text-slate-400">THIS CERTIFIES THAT</p>
-                      <h2 className="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 font-serif">
+                      <p className="text-xs uppercase tracking-widest text-slate-400 font-mono">THIS CERTIFIES THAT</p>
+                      <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 font-serif">
                         {generatedCert.studentName}
                       </h2>
-                      <p className="text-xs text-slate-300 font-sans max-w-lg mx-auto pt-2">
+                      <p className="text-xs text-slate-300 max-w-lg mx-auto pt-2">
                         has successfully completed the intensive hands-on technical requirements for
                       </p>
-                      <h3 className="text-xl font-bold text-blue-400 font-sans pt-1">
+                      <h3 className="text-xl font-bold text-[#38BDF8] pt-1">
                         {generatedCert.programName}
                       </h3>
                       <p className="text-xs text-slate-400 font-mono pt-1">
@@ -594,8 +703,8 @@ export default function AdminDashboardPage() {
                       </p>
                     </div>
 
-                    <div className="flex justify-between items-end border-t border-amber-500/20 pt-6 font-mono text-xs text-slate-400">
-                      <div className="text-left space-y-1">
+                    <div className="flex justify-between items-end border-t border-amber-500/20 pt-6 text-xs text-slate-400">
+                      <div className="text-left space-y-1 font-mono">
                         <p className="text-[10px] text-slate-500">DATE OF ISSUANCE</p>
                         <p className="text-white font-bold">{new Date(generatedCert.issueDate).toLocaleDateString()}</p>
                       </div>
@@ -604,7 +713,7 @@ export default function AdminDashboardPage() {
                         <Award className="w-9 h-9" />
                       </div>
 
-                      <div className="text-right space-y-1">
+                      <div className="text-right space-y-1 font-mono">
                         <p className="text-[10px] text-slate-500">VERIFIED AUTHORITY SIGNATURE</p>
                         <p className="text-amber-300 font-bold italic">{generatedCert.customSignature}</p>
                       </div>
@@ -615,47 +724,48 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Recent Live Applications Table */}
-            <div className="card-glass-dark p-8 space-y-4 bg-[#161B22] border border-[#30363D]">
+            <div className="p-8 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-base font-bold text-[#F5F7FA] flex items-center gap-2">
-                  <Inbox className="w-4 h-4 text-blue-400" />
-                  <span>Latest 1-Day Slot Applications (Stored in MongoDB)</span>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <Inbox className="w-5 h-5 text-[#38BDF8]" />
+                  <span>Latest 1-Day Slot Applications (MongoDB)</span>
                 </h2>
                 <button
                   onClick={() => setActiveTab('applications')}
-                  className="text-xs font-mono text-blue-400 hover:underline"
+                  className="text-xs font-semibold text-[#38BDF8] hover:underline flex items-center gap-1"
                 >
-                  View All ({applications.length}) →
+                  <span>View All ({applications.length})</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-mono">
+                <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-[#30363D] text-slate-400">
-                      <th className="py-2.5 px-3">Ticket ID</th>
-                      <th className="py-2.5 px-3">Student Name</th>
-                      <th className="py-2.5 px-3">Email</th>
-                      <th className="py-2.5 px-3">Phone</th>
-                      <th className="py-2.5 px-3">Slot Date</th>
-                      <th className="py-2.5 px-3">Track</th>
+                    <tr className="border-b border-white/10 text-slate-400 font-mono uppercase text-[11px]">
+                      <th className="py-3 px-4">Ticket ID</th>
+                      <th className="py-3 px-4">Student Name</th>
+                      <th className="py-3 px-4">Email</th>
+                      <th className="py-3 px-4">Phone</th>
+                      <th className="py-3 px-4">Slot Date</th>
+                      <th className="py-3 px-4">Track</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#30363D]">
-                    {applications.slice(0, 5).map((app: any) => (
-                      <tr key={app._id}>
-                        <td className="py-3 px-3 font-bold text-emerald-400">{app.ticketId || 'N/A'}</td>
-                        <td className="py-3 px-3 font-bold text-[#F5F7FA]">{app.fullName}</td>
-                        <td className="py-3 px-3 text-slate-300">{app.email}</td>
-                        <td className="py-3 px-3 text-slate-400">{app.phone}</td>
-                        <td className="py-3 px-3 text-slate-300">{app.slotDate || 'Upcoming Saturday'}</td>
-                        <td className="py-3 px-3 text-blue-400 font-bold">{app.programTrack}</td>
+                  <tbody className="divide-y divide-white/10">
+                    {filteredApplications.slice(0, 5).map((app: any) => (
+                      <tr key={app._id} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3.5 px-4 font-bold text-emerald-400 font-mono">{app.ticketId || 'N/A'}</td>
+                        <td className="py-3.5 px-4 font-bold text-white">{app.fullName}</td>
+                        <td className="py-3.5 px-4 text-slate-300">{app.email}</td>
+                        <td className="py-3.5 px-4 text-slate-400">{app.phone}</td>
+                        <td className="py-3.5 px-4 text-slate-300">{app.slotDate || 'Upcoming Saturday'}</td>
+                        <td className="py-3.5 px-4 text-[#38BDF8] font-semibold">{app.programTrack}</td>
                       </tr>
                     ))}
-                    {applications.length === 0 && (
+                    {filteredApplications.length === 0 && (
                       <tr>
-                        <td colSpan={6} className="py-6 text-center text-slate-500 font-mono">
-                          No slot applications received yet. Submit one from the website modal to view here!
+                        <td colSpan={6} className="py-8 text-center text-slate-400 font-mono">
+                          No applications match your search.
                         </td>
                       </tr>
                     )}
@@ -668,54 +778,54 @@ export default function AdminDashboardPage() {
 
         {/* Applications Tab */}
         {activeTab === 'applications' && (
-          <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-            <div className="flex justify-between items-center">
+          <div className="p-8 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 pb-4">
               <div>
-                <h2 className="text-lg font-bold text-[#F5F7FA]">All 1-Day Slot Applications & Leads</h2>
-                <p className="text-xs text-slate-400 font-mono">
+                <h2 className="text-lg font-bold text-white">All 1-Day Slot Applications & Leads</h2>
+                <p className="text-xs text-slate-300 mt-1">
                   Student applications submitted via &quot;Book 1-Day Slot&quot; modal.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded bg-blue-900/60 text-blue-300 text-xs font-mono font-bold border border-blue-700">
-                Total: {applications.length} Applicants
+              <span className="px-3.5 py-1.5 rounded-full bg-[#0E8C93]/30 text-[#38BDF8] text-xs font-bold border border-[#0E8C93]/40">
+                Total: {filteredApplications.length} Applicants
               </span>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#30363D] text-slate-400">
-                    <th className="py-2.5 px-3">Ticket Pass</th>
-                    <th className="py-2.5 px-3">Student Name</th>
-                    <th className="py-2.5 px-3">Email</th>
-                    <th className="py-2.5 px-3">Phone</th>
-                    <th className="py-2.5 px-3">College</th>
-                    <th className="py-2.5 px-3">Slot Date</th>
-                    <th className="py-2.5 px-3">Track</th>
-                    <th className="py-2.5 px-3">Status</th>
+                  <tr className="border-b border-white/10 text-slate-400 font-mono uppercase text-[11px]">
+                    <th className="py-3 px-4">Ticket Pass</th>
+                    <th className="py-3 px-4">Student Name</th>
+                    <th className="py-3 px-4">Email</th>
+                    <th className="py-3 px-4">Phone</th>
+                    <th className="py-3 px-4">College</th>
+                    <th className="py-3 px-4">Slot Date</th>
+                    <th className="py-3 px-4">Track</th>
+                    <th className="py-3 px-4">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#30363D]">
-                  {applications.map((app: any) => (
-                    <tr key={app._id}>
-                      <td className="py-3 px-3 font-bold text-emerald-400">{app.ticketId || 'N/A'}</td>
-                      <td className="py-3 px-3 font-bold text-[#F5F7FA]">{app.fullName}</td>
-                      <td className="py-3 px-3 text-slate-300">{app.email}</td>
-                      <td className="py-3 px-3 text-slate-400">{app.phone}</td>
-                      <td className="py-3 px-3 text-slate-300">{app.college}</td>
-                      <td className="py-3 px-3 text-slate-300">{app.slotDate || 'Upcoming Saturday'}</td>
-                      <td className="py-3 px-3 text-blue-400 font-bold">{app.programTrack}</td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-800 font-bold">
+                <tbody className="divide-y divide-white/10">
+                  {filteredApplications.map((app: any) => (
+                    <tr key={app._id} className="hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-emerald-400 font-mono">{app.ticketId || 'N/A'}</td>
+                      <td className="py-3.5 px-4 font-bold text-white">{app.fullName}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{app.email}</td>
+                      <td className="py-3.5 px-4 text-slate-400">{app.phone}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{app.college}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{app.slotDate || 'Upcoming Saturday'}</td>
+                      <td className="py-3.5 px-4 text-[#38BDF8] font-semibold">{app.programTrack}</td>
+                      <td className="py-3.5 px-4">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                           {app.status || 'CONFIRMED_SLOT'}
                         </span>
                       </td>
                     </tr>
                   ))}
-                  {applications.length === 0 && (
+                  {filteredApplications.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="py-8 text-center text-slate-500 font-mono">
-                        No applications in database yet.
+                      <td colSpan={8} className="py-8 text-center text-slate-400 font-mono">
+                        No slot applications found.
                       </td>
                     </tr>
                   )}
@@ -727,52 +837,63 @@ export default function AdminDashboardPage() {
 
         {/* Student Accounts Tab */}
         {activeTab === 'students' && (
-          <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-            <h2 className="text-lg font-bold text-[#F5F7FA]">Manage All Student Accounts (Full Control)</h2>
+          <div className="p-8 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 pb-4">
+              <div>
+                <h2 className="text-lg font-bold text-white">Manage Student Roster</h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  Full control over active student accounts and status toggles.
+                </p>
+              </div>
+              <span className="px-3.5 py-1.5 rounded-full bg-[#0E8C93]/30 text-[#38BDF8] text-xs font-bold border border-[#0E8C93]/40">
+                Total: {filteredStudents.length} Students
+              </span>
+            </div>
+
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#30363D] text-slate-400">
-                    <th className="py-2 px-3">Student Name</th>
-                    <th className="py-2 px-3">Email</th>
-                    <th className="py-2 px-3">College</th>
-                    <th className="py-2 px-3">Track</th>
-                    <th className="py-2 px-3">Status</th>
-                    <th className="py-2 px-3 text-right">Action</th>
+                  <tr className="border-b border-white/10 text-slate-400 font-mono uppercase text-[11px]">
+                    <th className="py-3 px-4">Student Name</th>
+                    <th className="py-3 px-4">Email</th>
+                    <th className="py-3 px-4">College</th>
+                    <th className="py-3 px-4">Track</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#30363D]">
-                  {combinedStudentsList.map((s: any, idx: number) => (
-                    <tr key={idx}>
-                      <td className="py-3 px-3 font-bold text-[#F5F7FA]">{s.name}</td>
-                      <td className="py-3 px-3 text-slate-400">{s.email}</td>
-                      <td className="py-3 px-3 text-slate-300">{s.college || 'N/A'}</td>
-                      <td className="py-3 px-3 text-[#3B82F6]">{s.track || 'Full Stack Development'}</td>
-                      <td className="py-3 px-3">
+                <tbody className="divide-y divide-white/10">
+                  {filteredStudents.map((s: any, idx: number) => (
+                    <tr key={idx} className="hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-white">{s.name}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{s.email}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{s.college || 'N/A'}</td>
+                      <td className="py-3.5 px-4 text-[#38BDF8] font-semibold">{s.track || 'Full Stack Development'}</td>
+                      <td className="py-3.5 px-4">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] ${
+                          className={`px-2.5 py-1 rounded-full text-[10px] ${
                             s.status === 'SUSPENDED'
-                              ? 'bg-red-950/60 text-red-300 border border-red-800 font-bold'
-                              : 'bg-emerald-950/60 text-emerald-300 border border-emerald-800 font-bold'
+                              ? 'bg-red-500/20 text-red-300 border border-red-500/30 font-bold'
+                              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold'
                           }`}
                         >
                           {s.status || 'ACTIVE'}
                         </span>
                       </td>
-                      <td className="py-3 px-3 text-right">
+                      <td className="py-3.5 px-4 text-right">
                         <button
                           onClick={() => handleToggleStudentStatus(s.id, s.status || 'ACTIVE')}
-                          className="px-2.5 py-1 text-[10px] rounded bg-[#1F2937] hover:bg-[#374151] text-slate-200 border border-[#30363D] font-mono font-semibold transition-colors"
+                          className="px-3 py-1.5 text-[11px] rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 border border-white/15 font-semibold transition-colors"
                         >
                           {s.status === 'SUSPENDED' ? 'Activate' : 'Suspend'}
                         </button>
                       </td>
                     </tr>
                   ))}
-                  {combinedStudentsList.length === 0 && (
+                  {filteredStudents.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-500 font-mono">
-                        No registered student accounts found.
+                      <td colSpan={6} className="py-8 text-center text-slate-400 font-mono">
+                        No student accounts found matching your query.
                       </td>
                     </tr>
                   )}
@@ -784,50 +905,50 @@ export default function AdminDashboardPage() {
 
         {/* Certificates Hub Tab */}
         {activeTab === 'certificates' && (
-          <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-            <div className="flex justify-between items-center">
+          <div className="p-8 rounded-2xl bg-[#0A1E33]/90 border border-[#0E8C93]/30 shadow-xl space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 pb-4">
               <div>
-                <h2 className="text-lg font-bold text-[#F5F7FA]">All Issued Certificates & Credentials</h2>
-                <p className="text-xs text-slate-400 font-mono">
-                  Verified certificates stored in database.
+                <h2 className="text-lg font-bold text-white">All Issued Certificates & Credentials</h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  Verified certificates stored in database with instant verification URLs.
                 </p>
               </div>
-              <span className="px-3 py-1 rounded bg-amber-950/60 text-amber-300 text-xs font-mono font-bold border border-amber-800">
-                Total: {issuedCertificates.length} Issued
+              <span className="px-3.5 py-1.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
+                Total: {filteredCertificates.length} Certificates
               </span>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-mono">
+              <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#30363D] text-slate-400">
-                    <th className="py-2.5 px-3">Certificate Pass ID</th>
-                    <th className="py-2.5 px-3">Student Name</th>
-                    <th className="py-2.5 px-3">Program Track</th>
-                    <th className="py-2.5 px-3">Certificate Type</th>
-                    <th className="py-2.5 px-3">Issue Date</th>
-                    <th className="py-2.5 px-3">Status</th>
+                  <tr className="border-b border-white/10 text-slate-400 font-mono uppercase text-[11px]">
+                    <th className="py-3 px-4">Certificate Pass ID</th>
+                    <th className="py-3 px-4">Student Name</th>
+                    <th className="py-3 px-4">Program Track</th>
+                    <th className="py-3 px-4">Certificate Type</th>
+                    <th className="py-3 px-4">Issue Date</th>
+                    <th className="py-3 px-4">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#30363D]">
-                  {issuedCertificates.map((c: any) => (
-                    <tr key={c._id}>
-                      <td className="py-3 px-3 font-bold text-amber-400">{c.certificateId}</td>
-                      <td className="py-3 px-3 font-bold text-[#F5F7FA]">{c.studentName}</td>
-                      <td className="py-3 px-3 text-blue-400 font-bold">{c.programName}</td>
-                      <td className="py-3 px-3 text-slate-300">{c.certificateType || '1-Day Experience Credential'}</td>
-                      <td className="py-3 px-3 text-slate-400">{new Date(c.issueDate).toLocaleDateString()}</td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-800 font-bold">
+                <tbody className="divide-y divide-white/10">
+                  {filteredCertificates.map((c: any) => (
+                    <tr key={c._id} className="hover:bg-white/5 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-amber-400 font-mono">{c.certificateId}</td>
+                      <td className="py-3.5 px-4 font-bold text-white">{c.studentName}</td>
+                      <td className="py-3.5 px-4 text-[#38BDF8] font-semibold">{c.programName}</td>
+                      <td className="py-3.5 px-4 text-slate-300">{c.certificateType || '1-Day Experience Credential'}</td>
+                      <td className="py-3.5 px-4 text-slate-400">{new Date(c.issueDate).toLocaleDateString()}</td>
+                      <td className="py-3.5 px-4">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold">
                           {c.status || 'ISSUED'}
                         </span>
                       </td>
                     </tr>
                   ))}
-                  {issuedCertificates.length === 0 && (
+                  {filteredCertificates.length === 0 && (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-500 font-mono">
-                        No certificates issued yet. Generate one above!
+                      <td colSpan={6} className="py-8 text-center text-slate-400 font-mono">
+                        No issued certificates found.
                       </td>
                     </tr>
                   )}

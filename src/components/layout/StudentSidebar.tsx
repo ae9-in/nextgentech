@@ -47,13 +47,13 @@ export function StudentSidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-[#0D1117] text-[#F5F7FA] flex flex-col justify-between border-r border-[#30363D] shrink-0 min-h-screen sticky top-0 hidden md:flex z-30 select-none">
+    <aside className="w-64 bg-white text-[#0A1E33] flex flex-col justify-between border-r border-[#E1E8E8] shrink-0 min-h-screen sticky top-0 hidden md:flex z-30 select-none">
       <div className="p-6 space-y-6">
         <Link href="/" prefetch={true} className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-[#3B82F6] text-white flex items-center justify-center font-extrabold text-sm">
+          <div className="w-7 h-7 rounded-lg bg-[#0A1E33] text-white flex items-center justify-center font-display font-semibold text-sm">
             N
           </div>
-          <span className="font-extrabold text-base tracking-tight text-[#F5F7FA]">
+          <span className="font-display font-semibold text-base tracking-tight text-[#0A1E33]">
             NEXTGEN TECH
           </span>
         </Link>
@@ -68,10 +68,10 @@ export function StudentSidebar() {
                 key={item.name}
                 href={item.href}
                 prefetch={true}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-semibold transition-colors duration-150 ${
+                className={`flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-colors duration-150 ${
                   isActive
-                    ? 'bg-[#3B82F6] text-white font-bold'
-                    : 'text-slate-300 hover:bg-[#1F2937] hover:text-white'
+                    ? 'bg-[#0A1E33] text-white font-semibold'
+                    : 'text-[#4B6072] hover:bg-[#F4F8F8] hover:text-[#0A1E33]'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -82,19 +82,19 @@ export function StudentSidebar() {
         </nav>
       </div>
 
-      <div className="p-4 border-t border-[#30363D] space-y-1 font-mono text-xs">
+      <div className="p-4 border-t border-[#E1E8E8] space-y-1 font-sans text-xs">
         <Link
           href="/"
           prefetch={true}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-[#1F2937] transition-colors"
+          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#4B6072] hover:text-[#0A1E33] hover:bg-[#F4F8F8] transition-colors"
         >
-          <Home className="w-4 h-4 text-[#3B82F6] shrink-0" />
+          <Home className="w-4 h-4 text-[#0E8C93] shrink-0" />
           <span>Return to Homepage</span>
         </Link>
 
         <button
           onClick={logoutUser}
-          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-950/40 transition-colors text-left"
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[#4B6072] hover:text-red-600 hover:bg-red-50 transition-colors text-left"
         >
           <LogOut className="w-4 h-4 shrink-0" />
           <span>Sign Out</span>

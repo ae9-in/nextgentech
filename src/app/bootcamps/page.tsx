@@ -4,56 +4,91 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { Code2, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export default function BootcampsPage() {
   return (
-    <div className="min-h-screen bg-[#0D1117] text-[#F5F7FA] selection:bg-[#3B82F6] selection:text-white font-sans">
+    <div className="min-h-screen bg-white text-[#0A1E33] selection:bg-[#0E8C93] selection:text-white font-sans">
       <Navbar />
 
       <main className="pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center space-y-4 max-w-3xl mx-auto">
-            <span className="text-xs font-mono font-semibold text-[#3B82F6] uppercase bg-[#161B22] px-3.5 py-1.5 rounded-md border border-[#30363D]">
-              INTENSIVE TRACKS
+            <span className="text-xs font-sans font-semibold text-[#0E8C93] uppercase tracking-[0.18em]">
+              INTENSIVE CAREER TRACKS
             </span>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-[#F5F7FA]">
-              Developer Bootcamps
+            <h1 className="text-4xl sm:text-5xl font-display font-semibold text-[#0A1E33]">
+              Professional Bootcamps
             </h1>
-            <p className="text-slate-400 text-base font-normal">
-              Immersive, outcome-driven coding bootcamps designed to take you from foundational syntax to production deployment.
+            <p className="text-[#4B6072] text-base font-normal leading-relaxed">
+              Immersive, outcome-driven bootcamps designed to take you from foundational concepts to real-world corporate execution.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-              <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-[#3B82F6] font-bold">FULL STACK TRACK</span>
-                <span className="px-3 py-1 rounded bg-[#1F2937] border border-[#30363D] text-slate-300 font-bold">8 Weeks</span>
+            {/* Web Development */}
+            <div className="bg-white p-8 space-y-6 border border-[#E1E8E8] rounded-xl shadow-sm hover:border-[#7FC4C8] transition-all">
+              <div className="flex justify-between items-center text-xs font-sans">
+                <span className="text-[#0E8C93] font-semibold uppercase tracking-[0.18em]">WEB DEVELOPMENT</span>
+                <span className="px-3 py-1 rounded-full bg-[#E4F3F3] text-[#0B6E74] font-medium border-none">7 Days</span>
               </div>
-              <h3 className="text-2xl font-extrabold text-[#F5F7FA]">MERN Stack Development</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                Master React 19, Node.js, Express, MongoDB Atlas, TypeScript, and AWS deployment.
+              <h3 className="text-2xl font-display font-semibold text-[#0A1E33]">Web Development Bootcamp</h3>
+              <p className="text-xs text-[#4B6072] leading-relaxed font-normal">
+                Master React, Node.js, Express, MongoDB Atlas, HTML5/CSS3, and cloud deployment in an intensive sprint.
               </p>
-              <div className="pt-4 border-t border-[#30363D]">
-                <Link href="/login" className="btn-primary w-full py-3 text-xs text-center block font-semibold">
-                  Enroll in MERN Bootcamp →
+              <div className="pt-4 border-t border-[#E1E8E8]">
+                <Link href="/#register?program=Web%20Development%20Bootcamp" className="w-full py-3 text-xs text-center block font-medium bg-[#F2803A] hover:bg-[#E06A24] text-white rounded-lg transition-colors">
+                  Enroll in Web Dev Bootcamp →
                 </Link>
               </div>
             </div>
 
-            <div className="card-glass-dark p-8 space-y-6 bg-[#161B22] border border-[#30363D]">
-              <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-[#3B82F6] font-bold">AI ENGINEERING</span>
-                <span className="px-3 py-1 rounded bg-[#1F2937] border border-[#30363D] text-slate-300 font-bold">4 Weeks</span>
+            {/* BDE & Sales */}
+            <div className="bg-white p-8 space-y-6 border border-[#E1E8E8] rounded-xl shadow-sm hover:border-[#7FC4C8] transition-all">
+              <div className="flex justify-between items-center text-xs font-sans">
+                <span className="text-[#0E8C93] font-semibold uppercase tracking-[0.18em]">BDE & SALES</span>
+                <span className="px-3 py-1 rounded-full bg-[#E4F3F3] text-[#0B6E74] font-medium border-none">7 Days</span>
               </div>
-              <h3 className="text-2xl font-extrabold text-[#F5F7FA]">AI & LLM Application Builder</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                Build production AI agents powered by OpenAI APIs, LangChain, vector databases, and Python.
+              <h3 className="text-2xl font-display font-semibold text-[#0A1E33]">BDE & Corporate Sales Bootcamp</h3>
+              <p className="text-xs text-[#4B6072] leading-relaxed font-normal">
+                Master B2B lead generation, consultative sales, corporate pitching, HubSpot CRM, and high-ticket deal closing.
               </p>
-              <div className="pt-4 border-t border-[#30363D]">
-                <Link href="/login" className="btn-primary w-full py-3 text-xs text-center block font-semibold">
-                  Enroll in AI Bootcamp →
+              <div className="pt-4 border-t border-[#E1E8E8]">
+                <Link href="/#register?program=BDE%20%26%20Corporate%20Sales%20Bootcamp" className="w-full py-3 text-xs text-center block font-medium bg-[#F2803A] hover:bg-[#E06A24] text-white rounded-lg transition-colors">
+                  Enroll in BDE & Sales Bootcamp →
+                </Link>
+              </div>
+            </div>
+
+            {/* Digital Marketing */}
+            <div className="bg-white p-8 space-y-6 border border-[#E1E8E8] rounded-xl shadow-sm hover:border-[#7FC4C8] transition-all">
+              <div className="flex justify-between items-center text-xs font-sans">
+                <span className="text-[#0E8C93] font-semibold uppercase tracking-[0.18em]">DIGITAL MARKETING</span>
+                <span className="px-3 py-1 rounded-full bg-[#E4F3F3] text-[#0B6E74] font-medium border-none">7 Days</span>
+              </div>
+              <h3 className="text-2xl font-display font-semibold text-[#0A1E33]">Digital Marketing & Performance Bootcamp</h3>
+              <p className="text-xs text-[#4B6072] leading-relaxed font-normal">
+                Master Meta/Google Ads, SEO keyword strategy, landing page conversion funnels, and marketing analytics.
+              </p>
+              <div className="pt-4 border-t border-[#E1E8E8]">
+                <Link href="/#register?program=Digital%20Marketing%20Bootcamp" className="w-full py-3 text-xs text-center block font-medium bg-[#F2803A] hover:bg-[#E06A24] text-white rounded-lg transition-colors">
+                  Enroll in Marketing Bootcamp →
+                </Link>
+              </div>
+            </div>
+
+            {/* HR Operations */}
+            <div className="bg-white p-8 space-y-6 border border-[#E1E8E8] rounded-xl shadow-sm hover:border-[#7FC4C8] transition-all">
+              <div className="flex justify-between items-center text-xs font-sans">
+                <span className="text-[#0E8C93] font-semibold uppercase tracking-[0.18em]">HR & PEOPLE OPS</span>
+                <span className="px-3 py-1 rounded-full bg-[#E4F3F3] text-[#0B6E74] font-medium border-none">7 Days</span>
+              </div>
+              <h3 className="text-2xl font-display font-semibold text-[#0A1E33]">HR Operations & Recruitment Bootcamp</h3>
+              <p className="text-xs text-[#4B6072] leading-relaxed font-normal">
+                Master talent acquisition, candidate screening with ATS tools, HR policy frameworks, and employee lifecycle.
+              </p>
+              <div className="pt-4 border-t border-[#E1E8E8]">
+                <Link href="/#register?program=HR%20%26%20People%20Operations%20Bootcamp" className="w-full py-3 text-xs text-center block font-medium bg-[#F2803A] hover:bg-[#E06A24] text-white rounded-lg transition-colors">
+                  Enroll in HR Bootcamp →
                 </Link>
               </div>
             </div>

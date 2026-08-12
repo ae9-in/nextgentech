@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CONTENT } from '@/config/content';
-import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
+import { ChevronDown, HelpCircle } from 'lucide-react';
 
 export const FaqAccordion: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -13,26 +13,22 @@ export const FaqAccordion: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-28 bg-[#07080d] relative overflow-hidden section-glow-top">
-      {/* Ambient */}
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-900/8 rounded-full blur-[160px] pointer-events-none" />
-
+    <section id="faq" className="py-28 bg-[#F4F8F8] border-b border-[#E1E8E8] relative overflow-hidden">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center space-y-5 mb-16"
+          className="text-center space-y-4 mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-950/40 border border-purple-500/20 text-purple-300 text-xs font-semibold uppercase tracking-[0.15em]">
-            <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Got Questions?</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold font-display text-white">
+          <span className="text-xs font-sans font-semibold text-[#0E8C93] uppercase tracking-[0.18em] block">
+            GOT QUESTIONS?
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-display font-semibold text-[#0A1E33]">
             Frequently Asked{' '}
-            <span className="text-gradient-cyan">Questions</span>
+            <span className="text-[#0E8C93]">Questions</span>
           </h2>
-          <p className="text-slate-400 text-base sm:text-lg">
+          <p className="text-[#4B6072] text-base sm:text-lg font-sans">
             Everything you need to know about NextGen Tech workshops, internships, and bootcamps.
           </p>
         </motion.div>
@@ -48,23 +44,23 @@ export const FaqAccordion: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05 }}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                className={`rounded-xl border transition-all duration-200 overflow-hidden ${
                   isOpen
-                    ? 'bg-[#0d0f1c] border-purple-500/30 shadow-lg shadow-purple-900/10'
-                    : 'bg-white/[0.015] border-white/[0.06] hover:border-white/[0.1]'
+                    ? 'bg-white border-[#7FC4C8] shadow-sm'
+                    : 'bg-white border-[#E1E8E8] hover:border-[#7FC4C8]'
                 }`}
               >
                 <button
                   onClick={() => toggleFaq(idx)}
                   className="w-full p-6 text-left flex items-center justify-between gap-4 focus:outline-none group"
                 >
-                  <span className={`text-base sm:text-lg font-bold font-display transition-colors duration-300 ${isOpen ? 'text-cyan-300' : 'text-white group-hover:text-slate-200'}`}>
+                  <span className={`text-base sm:text-lg font-display font-semibold transition-colors ${isOpen ? 'text-[#0E8C93]' : 'text-[#0A1E33] group-hover:text-[#0E8C93]'}`}>
                     {faq.question}
                   </span>
-                  <div className={`p-2 rounded-xl border transition-all duration-300 shrink-0 ${
+                  <div className={`p-2 rounded-lg border transition-all shrink-0 ${
                     isOpen
-                      ? 'bg-purple-600 text-white rotate-180 border-purple-400 shadow-md shadow-purple-600/30'
-                      : 'bg-white/[0.03] text-slate-500 border-white/[0.06]'
+                      ? 'bg-[#0E8C93] text-white rotate-180 border-[#0E8C93]'
+                      : 'bg-[#F4F8F8] text-[#4B6072] border-[#E1E8E8]'
                   }`}>
                     <ChevronDown className="w-4 h-4" />
                   </div>
@@ -78,7 +74,7 @@ export const FaqAccordion: React.FC = () => {
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="px-6 pb-6 text-slate-300 text-sm leading-relaxed border-t border-white/[0.04] pt-4">
+                      <div className="px-6 pb-6 text-[#4B6072] text-sm leading-relaxed border-t border-[#E1E8E8] pt-4 font-sans">
                         {faq.answer}
                       </div>
                     </motion.div>

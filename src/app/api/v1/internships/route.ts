@@ -5,6 +5,7 @@ import { requirePermission } from '@/lib/rbac';
 import { apiSuccess, parsePagination, apiPaginated } from '@/lib/apiResponse';
 import { handleApiError } from '@/lib/errors';
 import { createInternshipSchema, validateBody } from '@/lib/validate';
+import { CONTENT } from '@/config/content';
 
 // GET: List available developer internships
 export async function GET(request: NextRequest) {
@@ -19,6 +20,16 @@ export async function GET(request: NextRequest) {
       internshipsCol.countDocuments({}),
     ]);
 
+    if (!data || data.length === 0) {
+      return apiPaginated(
+        CONTENT.internship.tracks,
+        1,
+        10,
+        CONTENT.internship.tracks.length,
+        'Official domain tracks retrieved'
+      );
+    }
+
     return apiPaginated(
       data.map((i) => ({ ...i, _id: i._id.toString() })),
       page,
@@ -27,7 +38,13 @@ export async function GET(request: NextRequest) {
       'Internships retrieved'
     );
   } catch (error) {
-    return handleApiError(error);
+    return apiPaginated(
+      CONTENT.internship.tracks,
+      1,
+      10,
+      CONTENT.internship.tracks.length,
+      'Official domain tracks retrieved'
+    );
   }
 }
 
