@@ -56,9 +56,6 @@ export function TestimonialsSection({
               ))}
             </div>
           </div>
-
-          <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/4 bg-gradient-to-r from-[#071321] to-transparent sm:block z-20" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/4 bg-gradient-to-l from-[#071321] to-transparent sm:block z-20" />
         </div>
       </div>
     </section>
