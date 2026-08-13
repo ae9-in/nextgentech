@@ -651,11 +651,6 @@ export const CONTENT = {
       answer: "Yes! We offer special college group pricing and campus ambassador discounts for groups of 5 or more students. We also partner with Training & Placement Officers (TPOs) for semester-integrated programs. Use our 'Partner With Us' form or contact us directly to request a custom group pass.",
     },
     {
-      category: 'Pricing',
-      question: "What is the refund policy?",
-      answer: "We offer a 100% money-back guarantee for all 1-Day Experiences if you request a refund within 2 hours of the workshop start time. For Internships and Bootcamps, a full refund is available within the first 48 hours of enrollment. No questions asked.",
-    },
-    {
       category: 'Placements',
       question: "Does NextGen Tech help with job placements or career support?",
       answer: "While we don't guarantee placements, we provide end-to-end career support including resume building, LinkedIn profile optimization, portfolio reviews, mock interview sessions, and access to our hiring partner network. Many of our alumni have secured roles at startups, product companies, and service firms within weeks of completing our programs.",

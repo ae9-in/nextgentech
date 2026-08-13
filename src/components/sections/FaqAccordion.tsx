@@ -239,30 +239,6 @@ export const FaqAccordion: React.FC = () => {
           </AnimatePresence>
         </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <div className="inline-flex flex-col items-center gap-4 p-8 rounded-2xl bg-white/[0.04] border border-white/8 backdrop-blur-sm">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0E8C93] to-[#0A6E74] flex items-center justify-center shadow-lg shadow-[#0E8C93]/25">
-              <MessageCircleQuestion className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-white/80 text-sm font-sans">
-              Still have questions? We&apos;re here to help.
-            </p>
-            <a
-              href="mailto:hello@nextgentech.in"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#0E8C93] to-[#0A6E74] text-white text-sm font-semibold hover:shadow-lg hover:shadow-[#0E8C93]/30 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <Headphones className="w-4 h-4" />
-              Contact Support
-            </a>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
