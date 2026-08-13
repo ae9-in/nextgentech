@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@number-flow/react": "^0.6.2",
+    "@radix-ui/react-avatar": "^1.2.6",
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",

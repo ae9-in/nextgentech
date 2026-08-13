@@ -125,12 +125,6 @@ export const InternshipSection: React.FC<InternshipSectionProps> = ({ onExploreI
                       </span>
                     </span>
 
-                    {/* Price tag */}
-                    <div className="absolute bottom-4 left-4 flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-white">{track.price}</span>
-                      <span className="text-xs text-white/50">/ program</span>
-                    </div>
-
                     {/* Icon badge */}
                     <div className={`absolute bottom-4 right-4 w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
                       {getTrackIcon(track.icon, 'w-5 h-5 text-white')}
