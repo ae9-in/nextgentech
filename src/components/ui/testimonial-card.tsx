@@ -38,12 +38,9 @@ export function TestimonialCard({
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#0E8C93]/40 to-transparent group-hover:via-[#0E8C93]" />
       
       <div className="flex items-center gap-3.5">
-        <Avatar className="h-12 w-12 border-2 border-[#0E8C93]/30 shadow-md">
-          <AvatarImage src={author.avatar} alt={author.name} className="object-cover" />
-          <AvatarFallback className="bg-[#0E8C93]/20 text-[#0E8C93] font-bold text-sm">
-            {author.name.substring(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0E8C93] to-[#0A6E74] text-white font-bold text-sm flex items-center justify-center border border-[#0E8C93]/40 shadow-md shrink-0">
+          {author.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+        </div>
         <div className="flex flex-col items-start min-w-0">
           <h3 className="text-base font-display font-semibold text-white group-hover:text-[#0E8C93] transition-colors truncate">
             {author.name}
